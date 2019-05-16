@@ -84,6 +84,19 @@ public class Grid {
     }
 
     /**
+     * Get the total distance between 2 nodes, take weight into consideration.
+     * @param node1
+     * @param node2
+     * @param weight
+     * @return Distance between the 2 nodes.
+     */
+    public double getDistanceBetween(Node node1, Node node2, int weight) {
+        int dx = Math.abs(node1.getCol() - node2.getCol());
+        int dy = Math.abs(node1.getRow() - node2.getRow());
+        return weight * Heuristic.getHeuristic(Heuristic.Type.Euclidean, dx, dy);
+    }
+
+    /**
      * Get a set of all walkable immediate neighbors in the orthogonal direction.
      * If diagonal nodes are desired, include those too.
      * @param node The node whose neighbors we are getting.
