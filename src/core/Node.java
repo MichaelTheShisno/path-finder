@@ -1,6 +1,9 @@
 package core;
 
-public class Node {
+/**
+ * Class used to store metadata pertinent to path finding algorithms.
+ */
+public class Node implements Comparable<Node> {
     public final int row, col;
     public Node parent;
     public double gScore;
@@ -8,7 +11,7 @@ public class Node {
     public double fScore;
     public final boolean walkable;
 
-    public Node (final int row, final int col, final boolean walkable) {
+    public Node(final int row, final int col, final boolean walkable) {
         this.row = row;
         this.col = col;
         this.walkable = walkable;
@@ -18,6 +21,7 @@ public class Node {
         this(0, 0, false);
     }
 
+    @Override
     public int compareTo(Node other) {
         return Double.compare(this.fScore, other.fScore);
     }
