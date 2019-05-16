@@ -29,8 +29,8 @@ public class Util {
         double sum = 0.0;
         int dx, dy;
         for(int i = 1; i < nodes.size(); i++) {
-            dx = Math.abs(nodes.get(i-1).getX() - nodes.get(i).getX());
-            dy = Math.abs(nodes.get(i-1).getY() - nodes.get(i).getY());
+            dx = Math.abs(nodes.get(i-1).getCol() - nodes.get(i).getCol());
+            dy = Math.abs(nodes.get(i-1).getRow() - nodes.get(i).getRow());
             sum += Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
         }
         return sum;

@@ -4,16 +4,16 @@ package core;
  * Class used to store metadata pertinent to path finding algorithms.
  */
 public class Node implements Comparable<Node> {
-    private final int x, y;
+    private final int row, col;
     private Node parent;
     private double gScore;
     private double hScore;
     private double fScore;
     private boolean walkable;
 
-    public Node(final int x, final int y, final boolean walkable) {
-        this.x = x;
-        this.y = y;
+    public Node(final int row, final int col, final boolean walkable) {
+        this.row = row;
+        this.col = col;
         this.walkable = walkable;
     }
 
@@ -29,21 +29,21 @@ public class Node implements Comparable<Node> {
     public boolean equals(Object obj) {
         if (obj instanceof Node) {
             Node other = (Node)obj;
-            return this.x == other.x && this.y == other.y;
+            return this.row == other.row && this.col == other.col;
         }
         return false;
     }
 
     public String toString() {
-        return String.format("Node @ (%d,%d)", this.x, this.y);
+        return String.format("Node @ (%d,%d)", this.row, this.col);
     }
 
-    public int getX() {
-        return x;
+    public int getRow() {
+        return row;
     }
 
-    public int getY() {
-        return y;
+    public int getCol() {
+        return col;
     }
 
     public Node getParent() {
