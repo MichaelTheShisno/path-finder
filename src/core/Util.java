@@ -14,7 +14,7 @@ public class Util {
      */
     public static ArrayList<Node> backtrace(Node node) {
         LinkedList<Node> path = new LinkedList<>();
-        for(Node temp = node; temp != null; temp = temp.parent) {
+        for(Node temp = node; temp != null; temp = temp.getParent()) {
             path.add(0, temp);
         }
         return new ArrayList<>(path);
@@ -29,8 +29,8 @@ public class Util {
         double sum = 0.0;
         int dx, dy;
         for(int i = 1; i < nodes.size(); i++) {
-            dx = Math.abs(nodes.get(i-1).x - nodes.get(i).x);
-            dy = Math.abs(nodes.get(i-1).y - nodes.get(i).y);
+            dx = Math.abs(nodes.get(i-1).getX() - nodes.get(i).getX());
+            dy = Math.abs(nodes.get(i-1).getY() - nodes.get(i).getY());
             sum += Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
         }
         return sum;
