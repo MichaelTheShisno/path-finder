@@ -1,5 +1,6 @@
 package core;
 
+import java.awt.*;
 import java.util.Set;
 import java.util.HashSet;
 
@@ -10,6 +11,7 @@ public class Grid {
     private Node[][] grid;
     private Node startNode;
     private Node endNode;
+    private final static int INFINITY = Integer.MAX_VALUE;
     private final static int[][] directions = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
     private final static int[][] diagonals = {{1, -1}, {1, 1}, {-1, 1}, {-1, -1}};
 
@@ -18,12 +20,35 @@ public class Grid {
         this.buildNodes();
     }
 
+    /**
+     * Populate grid with new nodes.
+     */
     private void buildNodes() {
         for (int row = 0; row < grid.length; row++) {
             for (int col = 0; col < grid[0].length; col++) {
                 grid[row][col] = new Node(row, col, true);
             }
         }
+    }
+
+    /**
+     * Set up grid for initial path finding.
+     * Set all node's parent to null, gScore to INFINITY, and set their hScores appropriately.
+     * @param hType Type of heuristic to be used for calculating hScores for each node.
+     */
+    public void init(Heuristic.Type hType) {
+        int endRow = endNode.getRow(), endCol = endNode.getCol();
+        int dx, dy;
+        for (Node[] row : grid) {
+            for (Node node : row) {
+                dx = Math.abs(node.getCol() - endCol);
+                dy = Math.abs(node.getRow() - endRow);
+                node.setG(0.5*INFINITY);
+                node.setH(Heuristic.getHeuristic(hType, dx, dy));
+                node.setParent(null);
+            }
+        }
+        startNode.setG(0);
     }
 
     public Node getNodeAt(int row, int col) {
