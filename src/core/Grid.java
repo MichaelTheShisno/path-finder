@@ -8,6 +8,8 @@ import java.util.HashSet;
  */
 public class Grid {
     private Node[][] grid;
+    private Node startNode;
+    private Node endNode;
     private final static int[][] directions = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
     private final static int[][] diagonals = {{1, -1}, {1, 1}, {-1, 1}, {-1, -1}};
 
@@ -28,16 +30,32 @@ public class Grid {
         return grid[row][col];
     }
 
-    private boolean isInside(int row, int col) {
+    public boolean isInside(int row, int col) {
         return (0 <= row && row < grid.length && 0 <= col && col < grid[0].length);
     }
 
-    private boolean isWalkable(int row, int col) {
+    public boolean isWalkable(int row, int col) {
         return isInside(row, col) && grid[row][col].isWalkable();
     }
 
-    private void setWalkableAt(int row, int col, boolean walkable) {
+    public void setWalkableAt(int row, int col, boolean walkable) {
         this.grid[row][col].setWalkable(walkable);
+    }
+
+    public Node getStartNode() {
+        return startNode;
+    }
+
+    public void setStartNode(Node startNode) {
+        this.startNode = startNode;
+    }
+
+    public Node getEndNode() {
+        return endNode;
+    }
+
+    public void setEndNode(Node endNode) {
+        this.endNode = endNode;
     }
 
     /**
@@ -47,7 +65,7 @@ public class Grid {
      * @param isDiagonal Determines whether diagonal neighbors are allowed in the search.
      * @return
      */
-    private Set<Node> getNeighbors(Node node, boolean isDiagonal) {
+    public Set<Node> getNeighbors(Node node, boolean isDiagonal) {
         Set<Node> neighbors = new HashSet<>();
         int row = node.getRow(), col = node.getCol();
         int adjRow, adjCol;
