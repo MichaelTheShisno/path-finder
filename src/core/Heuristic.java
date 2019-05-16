@@ -5,7 +5,7 @@ package core;
  * as well as the methods by which to calculate them.
  */
 public class Heuristic {
-    enum Type {
+    public enum Type {
         Manhattan, Euclidean, Octal, Chebyshev
     }
 
