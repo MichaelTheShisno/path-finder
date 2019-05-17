@@ -6,6 +6,7 @@ import java.awt.event.*;
 
 class TileGrid extends JPanel implements IConstants, MouseListener, MouseMotionListener {
     public Tile[][] tileMatrix;
+    public Tile currentTile;
     TileGrid() {
         super();
         tileMatrix = new Tile[NUM_ROWS][NUM_COLS];
@@ -30,6 +31,7 @@ class TileGrid extends JPanel implements IConstants, MouseListener, MouseMotionL
         JComponent component = (JComponent)findComponentAt(e.getX(), e.getY());
         if (component instanceof Tile) {
             Tile tile = (Tile)component;
+            currentTile = tile;
             switch (tile.getStatus()) {
                 case NORMAL:
                     tile.setStatus(Tile.STATUS.BLOCKED);
@@ -62,13 +64,16 @@ class TileGrid extends JPanel implements IConstants, MouseListener, MouseMotionL
         JComponent component = (JComponent)findComponentAt(e.getX(), e.getY());
         if (component instanceof Tile) {
             Tile tile = (Tile)component;
-            switch (tile.getStatus()) {
-                case NORMAL:
-                    tile.setStatus(Tile.STATUS.BLOCKED);
-                    break;
-                case BLOCKED:
-                    tile.setStatus(Tile.STATUS.NORMAL);
-                    break;
+            if (!tile.equals(currentTile)) {
+                currentTile = tile;
+                switch (tile.getStatus()) {
+                    case NORMAL:
+                        tile.setStatus(Tile.STATUS.BLOCKED);
+                        break;
+                    case BLOCKED:
+                        tile.setStatus(Tile.STATUS.NORMAL);
+                        break;
+                }
             }
         }
         this.repaint();
