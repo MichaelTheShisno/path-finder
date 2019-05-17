@@ -1,11 +1,12 @@
 package visual;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 /**
  * Class to handle the inputs of the user and relay them back to the frame.
  */
 public class PathFrameManager implements MouseListener {
     private PathFrame pFrame;
-    private boolean isMousePressed;
 
     public PathFrameManager(PathFrame pFrame) {
         this.pFrame = pFrame;
@@ -19,12 +20,12 @@ public class PathFrameManager implements MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        isMousePressed = true;
+
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        isMousePressed = false;
+
     }
 
     @Override

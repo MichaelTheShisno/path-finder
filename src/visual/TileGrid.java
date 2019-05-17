@@ -2,8 +2,9 @@ package visual;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.*;
 
-class TileGrid extends JPanel implements IConstants {
+class TileGrid extends JPanel implements IConstants, MouseListener {
     public Tile[][] tileMatrix;
     TileGrid() {
         super();
@@ -15,5 +16,31 @@ class TileGrid extends JPanel implements IConstants {
                 this.add(tileMatrix[row][col]);
             }
         }
+        addMouseListener(this);
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
     }
 }
