@@ -1,6 +1,5 @@
 package core;
 
-import java.awt.*;
 import java.util.Set;
 import java.util.HashSet;
 
