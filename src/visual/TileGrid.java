@@ -1,7 +1,5 @@
 package visual;
 
-import core.Grid;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -18,7 +16,7 @@ class TileGrid extends JPanel implements IConstants, MouseListener, MouseMotionL
                 this.add(tileMatrix[row][col]);
             }
         }
-        //addMouseListener(this);
+        addMouseListener(this);
         addMouseMotionListener(this);
     }
 
