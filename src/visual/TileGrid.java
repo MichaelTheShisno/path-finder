@@ -5,10 +5,18 @@ import java.awt.*;
 import java.awt.event.*;
 
 class TileGrid extends JPanel implements IConstants, MouseListener, MouseMotionListener {
-    public Tile[][] tileMatrix;
-    public Tile currentTile;
+    private Tile[][] tileMatrix;
+    private Tile currentTile;
+
     TileGrid() {
         super();
+        this.initGrid();
+        this.addMouseListener(this);
+        this.addMouseMotionListener(this);
+    }
+
+    private void initGrid() {
+        // Populate a grid of tiles.
         tileMatrix = new Tile[NUM_ROWS][NUM_COLS];
         this.setLayout(new GridLayout(NUM_ROWS, NUM_COLS));
         for (int row = 0; row < NUM_ROWS; row++) {
@@ -17,8 +25,13 @@ class TileGrid extends JPanel implements IConstants, MouseListener, MouseMotionL
                 this.add(tileMatrix[row][col]);
             }
         }
-        addMouseListener(this);
-        addMouseMotionListener(this);
+        // Make a start and end node.
+        tileMatrix[START_ROW][START_COL].setStatus(Tile.STATUS.START);
+        tileMatrix[END_ROW][END_COL].setStatus(Tile.STATUS.END);
+    }
+
+    public Tile[][] getTileMatrix() {
+        return tileMatrix;
     }
 
     @Override

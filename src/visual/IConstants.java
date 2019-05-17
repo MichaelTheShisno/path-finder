@@ -8,6 +8,10 @@ public interface IConstants {
     int NUM_ROWS = 45;
     int NUM_COLS = 80;
     int TILE_SIZE = SCREEN_HEIGHT/TileGrid.NUM_ROWS;
+    int START_ROW = NUM_ROWS / 2;
+    int START_COL = NUM_COLS / 4;
+    int END_ROW = NUM_ROWS / 2;
+    int END_COL = (3 * NUM_COLS) / 4;
 
     // Colors used to fill tiles on the grid.
     Color normalColor = Color.WHITE;
