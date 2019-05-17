@@ -3,10 +3,11 @@ import java.awt.event.*;
 /**
  * Class to handle the inputs of the user and relay them back to the frame.
  */
-public class ViewModel implements MouseListener {
+public class PathFrameManager implements MouseListener {
     private PathFrame pFrame;
     private boolean isMousePressed;
-    public ViewModel(PathFrame pFrame) {
+
+    public PathFrameManager(PathFrame pFrame) {
         this.pFrame = pFrame;
         pFrame.addMouseListener(this);
     }
