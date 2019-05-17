@@ -4,8 +4,9 @@ import javax.swing.JComponent;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 
-class Tile extends JComponent implements IConstants, MouseListener {
+class Tile extends JComponent implements IConstants {
     enum STATUS {
         NORMAL, BLOCKED, START, END, OPEN, CLOSED, FAILED, TESTED
     }
@@ -17,7 +18,6 @@ class Tile extends JComponent implements IConstants, MouseListener {
         super();
         this.size = size;
         this.status = STATUS.NORMAL;
-        addMouseListener(this);
     }
 
     private static Color getTileColor(STATUS status) {
@@ -59,40 +59,5 @@ class Tile extends JComponent implements IConstants, MouseListener {
         g2.fill(tile);
         g2.setColor(Color.BLACK);
         g2.draw(tile);
-    }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        if (e.getComponent() instanceof Tile) {
-            switch (this.getStatus()) {
-                case NORMAL:
-                    this.setStatus(Tile.STATUS.BLOCKED);
-                    break;
-                case BLOCKED:
-                    this.setStatus(Tile.STATUS.NORMAL);
-                    break;
-            }
-        }
-        this.repaint();
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
     }
 }

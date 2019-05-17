@@ -1,10 +1,12 @@
 package visual;
 
+import core.Grid;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-class TileGrid extends JPanel implements IConstants, MouseListener {
+class TileGrid extends JPanel implements IConstants, MouseListener, MouseMotionListener {
     public Tile[][] tileMatrix;
     TileGrid() {
         super();
@@ -16,7 +18,8 @@ class TileGrid extends JPanel implements IConstants, MouseListener {
                 this.add(tileMatrix[row][col]);
             }
         }
-        addMouseListener(this);
+        //addMouseListener(this);
+        addMouseMotionListener(this);
     }
 
     @Override
@@ -26,7 +29,19 @@ class TileGrid extends JPanel implements IConstants, MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-
+        JComponent component = (JComponent)findComponentAt(e.getX(), e.getY());
+        if (component instanceof Tile) {
+            Tile tile = (Tile)component;
+            switch (tile.getStatus()) {
+                case NORMAL:
+                    tile.setStatus(Tile.STATUS.BLOCKED);
+                    break;
+                case BLOCKED:
+                    tile.setStatus(Tile.STATUS.NORMAL);
+                    break;
+            }
+        }
+        this.repaint();
     }
 
     @Override
@@ -41,6 +56,28 @@ class TileGrid extends JPanel implements IConstants, MouseListener {
 
     @Override
     public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        JComponent component = (JComponent)findComponentAt(e.getX(), e.getY());
+        if (component instanceof Tile) {
+            Tile tile = (Tile)component;
+            switch (tile.getStatus()) {
+                case NORMAL:
+                    tile.setStatus(Tile.STATUS.BLOCKED);
+                    break;
+                case BLOCKED:
+                    tile.setStatus(Tile.STATUS.NORMAL);
+                    break;
+            }
+        }
+        this.repaint();
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
 
     }
 }
