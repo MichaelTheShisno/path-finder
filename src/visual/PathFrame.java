@@ -5,15 +5,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class PathFrame extends JFrame implements IConstants, KeyListener {
-    public TileGrid grid;
-    private PathFrameManager vm;
+    private TileGrid grid;
     public PathFrame() {
         super();
         this.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
         this.setTitle("Path Finder");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         grid = new TileGrid();
-        vm = new PathFrameManager(this);
         this.add(grid);
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setUndecorated(true);
@@ -23,11 +21,9 @@ public class PathFrame extends JFrame implements IConstants, KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-        System.out.printf("Key pressed: %c\n", e.getKeyChar());
         if (exitProgramKeysPressed(e)) {
             System.exit(0);
         } else if (resetKeysPressed(e)) {
-            System.out.println("Reset!");
             grid.resetGrid();
         }
     }

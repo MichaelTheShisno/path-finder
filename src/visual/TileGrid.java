@@ -15,8 +15,10 @@ class TileGrid extends JPanel implements IConstants, MouseListener, MouseMotionL
         this.addMouseMotionListener(this);
     }
 
+    /**
+     * Populate and create a new grid of tile objects.
+     */
     private void initGrid() {
-        // Populate a grid of tiles.
         tileMatrix = new Tile[NUM_ROWS][NUM_COLS];
         this.setLayout(new GridLayout(NUM_ROWS, NUM_COLS));
         for (int row = 0; row < NUM_ROWS; row++) {
@@ -25,11 +27,13 @@ class TileGrid extends JPanel implements IConstants, MouseListener, MouseMotionL
                 this.add(tileMatrix[row][col]);
             }
         }
-        // Make a start and end node.
         tileMatrix[START_ROW][START_COL].setStatus(Tile.STATUS.START);
         tileMatrix[END_ROW][END_COL].setStatus(Tile.STATUS.END);
     }
 
+    /**
+     * Clear off and restore grid to original look.
+     */
     public void resetGrid() {
         this.removeAll();
         this.updateUI();
