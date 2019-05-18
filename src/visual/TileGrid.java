@@ -77,7 +77,15 @@ class TileGrid extends JPanel implements IConstants, MouseListener, MouseMotionL
         JComponent component = (JComponent)findComponentAt(e.getX(), e.getY());
         if (component instanceof Tile) {
             Tile tile = (Tile)component;
-            if (!tile.equals(currentTile)) {
+            if (currentTile.getStatus() == Tile.STATUS.START) {
+                currentTile.setStatus(Tile.STATUS.NORMAL);
+                tile.setStatus(Tile.STATUS.START);
+                currentTile = tile;
+            } else if (currentTile.getStatus() == Tile.STATUS.END) {
+                currentTile.setStatus(Tile.STATUS.NORMAL);
+                tile.setStatus(Tile.STATUS.END);
+                currentTile = tile;
+            } else if (!tile.equals(currentTile)) {
                 currentTile = tile;
                 switch (tile.getStatus()) {
                     case NORMAL:
