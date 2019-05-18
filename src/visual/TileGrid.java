@@ -30,6 +30,12 @@ class TileGrid extends JPanel implements IConstants, MouseListener, MouseMotionL
         tileMatrix[END_ROW][END_COL].setStatus(Tile.STATUS.END);
     }
 
+    public void resetGrid() {
+        this.removeAll();
+        this.updateUI();
+        this.initGrid();
+    }
+
     public Tile[][] getTileMatrix() {
         return tileMatrix;
     }

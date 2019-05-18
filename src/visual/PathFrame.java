@@ -18,13 +18,17 @@ public class PathFrame extends JFrame implements IConstants, KeyListener {
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setUndecorated(true);
         this.setVisible(true);
-        addKeyListener(this);
+        this.addKeyListener(this);
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
+        System.out.printf("Key pressed: %c\n", e.getKeyChar());
         if (exitProgramKeysPressed(e)) {
             System.exit(0);
+        } else if (resetKeysPressed(e)) {
+            System.out.println("Reset!");
+            grid.resetGrid();
         }
     }
 
@@ -45,5 +49,14 @@ public class PathFrame extends JFrame implements IConstants, KeyListener {
      */
     private boolean exitProgramKeysPressed(KeyEvent e) {
         return e.getKeyChar() == KeyEvent.VK_ESCAPE || e.getKeyChar() == KeyEvent.VK_Q;
+    }
+
+    /**
+     * Check if a key event is a reset event.
+     * @param e KeyEvent
+     * @return Returns if any of the reset keys are hit.
+     */
+    private boolean resetKeysPressed(KeyEvent e) {
+        return e.getKeyChar() == KeyEvent.VK_R || e.getKeyChar() == KeyEvent.VK_C;
     }
 }
