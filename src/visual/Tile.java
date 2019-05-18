@@ -9,12 +9,13 @@ class Tile extends JComponent implements IConstants {
     }
 
     private final int size;
-    private STATUS status;
+    private STATUS status, prevStatus;
 
     Tile(int size) {
         super();
         this.size = size;
         this.status = STATUS.NORMAL;
+        this.prevStatus = STATUS.NORMAL;
     }
 
     private static Color getTileColor(STATUS status) {
@@ -42,9 +43,15 @@ class Tile extends JComponent implements IConstants {
         return status;
     }
 
-    public void setStatus(STATUS status) {
-        this.status = status;
+    public void setStatus(STATUS newStatus) {
+        this.prevStatus = this.status;
+        this.status = newStatus;
         this.repaint();
+    }
+
+    public void revertStatus() {
+        this.status = this.prevStatus;
+        this.prevStatus = STATUS.NORMAL;
     }
 
     @Override
