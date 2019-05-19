@@ -64,7 +64,6 @@ class TileGrid extends JPanel implements IConstants, MouseListener, MouseMotionL
                     break;
             }
         }
-        this.repaint();
     }
 
     @Override
@@ -105,7 +104,6 @@ class TileGrid extends JPanel implements IConstants, MouseListener, MouseMotionL
             }
             currentTile = tile;
         }
-        this.repaint();
     }
 
     @Override

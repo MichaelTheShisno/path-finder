@@ -52,6 +52,7 @@ class Tile extends JComponent implements IConstants {
     public void revertStatus() {
         this.status = this.prevStatus;
         this.prevStatus = STATUS.NORMAL;
+        this.repaint();
     }
 
     @Override

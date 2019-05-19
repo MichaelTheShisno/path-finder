@@ -1,6 +1,7 @@
 package visual;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Toolkit;
 
 public interface IConstants {
     int SCREEN_WIDTH = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
@@ -12,7 +13,13 @@ public interface IConstants {
     int START_COL = NUM_COLS / 4;
     int END_ROW = NUM_ROWS / 2;
     int END_COL = (3 * NUM_COLS) / 4;
+    int MENU_X = SCREEN_WIDTH / 4;
+    int MENU_Y = TILE_SIZE;
+    int MENU_WIDTH = SCREEN_WIDTH / 2;
+    int MENU_HEIGHT = (8 * SCREEN_HEIGHT) / 45;
 
+    // Menu Colors
+    Color menuBackgroundColor = new Color(0, 0, 0, 0.35f);
     // Colors used to fill tiles on the grid.
     Color normalColor = Color.WHITE;
     Color blockedColor = Color.GRAY;

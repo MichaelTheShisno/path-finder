@@ -2,17 +2,21 @@ package visual;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 
-public class PathPanel extends JPanel implements IConstants, KeyListener {
+public class PathPanel extends JPanel implements IConstants, KeyListener, MouseListener, MouseMotionListener {
     private TileGrid grid;
+    private ControllerMenu menu;
 
     PathPanel() {
         super();
         this.setLayout(new OverlayLayout(this));
         grid = new TileGrid();
-        this.add(grid, BorderLayout.CENTER);
+        menu = new ControllerMenu();
+        menu.setOpaque(false);
+        menu.setBackground(new Color(0, 0, 0, 0.58f));
+        this.add(menu);
+        this.add(grid);
         this.setFocusable(true);
         this.requestFocus();
         this.addKeyListener(this);
@@ -24,6 +28,7 @@ public class PathPanel extends JPanel implements IConstants, KeyListener {
             System.exit(0);
         } else if (resetKeysPressed(e)) {
             grid.resetGrid();
+            this.repaint();
         }
     }
 
@@ -53,5 +58,40 @@ public class PathPanel extends JPanel implements IConstants, KeyListener {
      */
     private boolean resetKeysPressed(KeyEvent e) {
         return e.getKeyChar() == KeyEvent.VK_R || e.getKeyChar() == KeyEvent.VK_C;
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+        //this.repaint();
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        //this.repaint();
+    }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+
     }
 }
