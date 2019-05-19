@@ -4,9 +4,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class PathPanel extends JPanel implements IConstants, KeyListener, MouseListener, MouseMotionListener {
+public class PathPanel extends JPanel implements IConstants, KeyListener {
     private TileGrid grid;
     private ControllerMenu menu;
+    private boolean isRunning;
 
     PathPanel() {
         super();
@@ -15,11 +16,12 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, MouseL
         menu = new ControllerMenu();
         menu.setOpaque(false);
         menu.setBackground(new Color(0, 0, 0, 0.58f));
-        this.add(menu);
+        //this.add(menu);
         this.add(grid);
         this.setFocusable(true);
         this.requestFocus();
         this.addKeyListener(this);
+        isRunning = false;
     }
 
     @Override
@@ -29,6 +31,12 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, MouseL
         } else if (resetKeysPressed(e)) {
             grid.resetGrid();
             this.repaint();
+        } else if (startKeyPressed(e)) {
+            isRunning = true;
+        } else if (pauseKeyPressed(e)) {
+            isRunning = false;
+        } else if (cancelKeyPressed(e)) {
+            isRunning = false;
         }
     }
 
@@ -57,41 +65,33 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, MouseL
      * @return Returns if any of the reset keys are hit.
      */
     private boolean resetKeysPressed(KeyEvent e) {
-        return e.getKeyChar() == KeyEvent.VK_R || e.getKeyChar() == KeyEvent.VK_C;
+        return !isRunning && (e.getKeyChar() == KeyEvent.VK_R || e.getKeyChar() == KeyEvent.VK_C);
     }
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-
+    /**
+     * Check if key event is a start search event.
+     * @param e KeyEvent
+     * @return Returns if a start key is hit.
+     */
+    private boolean startKeyPressed(KeyEvent e) {
+        return !isRunning && (e.getKeyChar() == KeyEvent.VK_S);
     }
 
-    @Override
-    public void mousePressed(MouseEvent e) {
-        //this.repaint();
+    /**
+     * Check if key event is a pause search event.
+     * @param e KeyEvent
+     * @return Returns if a pause key is hit.
+     */
+    private boolean pauseKeyPressed(KeyEvent e) {
+        return isRunning && (e.getKeyChar() == KeyEvent.VK_P);
     }
 
-    @Override
-    public void mouseReleased(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-        //this.repaint();
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
-
+    /**
+     * Check if key event is a cancel search event.
+     * @param e KeyEvent
+     * @return Returns if a cancel key is hit.
+     */
+    private boolean cancelKeyPressed(KeyEvent e) {
+        return isRunning && (e.getKeyChar() == KeyEvent.VK_C);
     }
 }
