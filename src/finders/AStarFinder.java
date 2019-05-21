@@ -10,20 +10,24 @@ import java.util.PriorityQueue;
 
 public class AStarFinder {
     private final Grid grid;
-    private boolean allowDiagonal;
-    private Heuristic.Type hType;
-    private int weight;
-    private Node startNode, endNode;
+    private final boolean allowDiagonal;
+    private final Heuristic.Type hType;
+    private final int weight;
+    private final Node startNode, endNode;
 
     public AStarFinder(Grid grid, boolean allowDiagonal, Heuristic.Type hType, int weight) {
         this.grid = grid;
         this.allowDiagonal = allowDiagonal;
         this.hType = hType;
         this.weight = weight;
-        startNode = grid.getStartNode();
-        endNode = grid.getEndNode();
+        this.startNode = grid.getStartNode();
+        this.endNode = grid.getEndNode();
     }
 
+    /**
+     * Perform the A* path finding algorithm.
+     * @return List of nodes from start to end nodes.
+     */
     public List<Node> findPath() {
         PriorityQueue<Node> openSet = AStarPrep();
         Set<Node> closedSet = new HashSet<>();
@@ -55,6 +59,10 @@ public class AStarFinder {
         return null;
     }
 
+    /**
+     * Initialize the grid and the open set.
+     * @return PriorityQueue of the initial open set
+     */
     private PriorityQueue<Node> AStarPrep() {
         grid.init(hType);
         PriorityQueue<Node> initialQueue = new PriorityQueue<>();
