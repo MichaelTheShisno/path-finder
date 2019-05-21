@@ -14,6 +14,8 @@ public class AStarFinder {
     private final Heuristic.Type hType;
     private final int weight;
     private final Node startNode, endNode;
+    private PriorityQueue<Node> openSet;
+    private Set<Node> closedSet;
 
     public AStarFinder(Grid grid, boolean allowDiagonal, Heuristic.Type hType, int weight) {
         this.grid = grid;
@@ -22,6 +24,7 @@ public class AStarFinder {
         this.weight = weight;
         this.startNode = grid.getStartNode();
         this.endNode = grid.getEndNode();
+        this.init();
     }
 
     /**
@@ -29,8 +32,6 @@ public class AStarFinder {
      * @return List of nodes from start to end nodes.
      */
     public List<Node> findPath() {
-        PriorityQueue<Node> openSet = AStarPrep();
-        Set<Node> closedSet = new HashSet<>();
         Node currentNode;
         double tentativeG;
         // While there are still unvisited nodes...
@@ -46,11 +47,13 @@ public class AStarFinder {
             for (Node neighbor : grid.getNeighbors(currentNode, allowDiagonal)) {
                 if (!closedSet.contains(neighbor)) {
                     tentativeG = currentNode.getG() + grid.getDistanceBetween(currentNode, neighbor, weight);
-                    neighbor.setParent(currentNode);
-                    neighbor.setG(tentativeG);
                     if (!openSet.contains(neighbor)) {
+                        neighbor.setParent(currentNode);
+                        neighbor.setG(tentativeG);
                         openSet.add(neighbor);
                     } else if (tentativeG < neighbor.getG()) {
+                        neighbor.setParent(currentNode);
+                        neighbor.setG(tentativeG);
                         openSet = new PriorityQueue<>(openSet);
                     }
                 }
@@ -59,14 +62,18 @@ public class AStarFinder {
         return null;
     }
 
-    /**
-     * Initialize the grid and the open set.
-     * @return PriorityQueue of the initial open set
-     */
-    private PriorityQueue<Node> AStarPrep() {
+    private void init() {
         grid.init(hType);
-        PriorityQueue<Node> initialQueue = new PriorityQueue<>();
-        initialQueue.add(startNode);
-        return initialQueue;
+        closedSet = new HashSet<>();
+        openSet = new PriorityQueue<>();
+        openSet.add(startNode);
+    }
+
+    public Node[] getOpenSet() {
+        return (Node[])openSet.toArray();
+    }
+
+    public Node[] getClosedSet() {
+        return (Node[])closedSet.toArray();
     }
 }

@@ -3,15 +3,15 @@ package visual;
 import javax.swing.JComponent;
 import java.awt.*;
 
-class Tile extends JComponent implements IConstants {
-    enum STATUS {
+public class Tile extends JComponent implements IConstants {
+    public enum STATUS {
         NORMAL, BLOCKED, START, END, OPEN, CLOSED, FAILED, TESTED
     }
 
     private final int size;
     private STATUS status, prevStatus;
 
-    Tile(int size) {
+    public Tile(int size) {
         super();
         this.size = size;
         this.status = STATUS.NORMAL;

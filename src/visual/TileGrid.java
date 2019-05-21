@@ -4,11 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-class TileGrid extends JPanel implements IConstants, MouseListener, MouseMotionListener {
+public class TileGrid extends JPanel implements IConstants, MouseListener, MouseMotionListener {
     private Tile[][] tileMatrix;
     private Tile currentTile;
 
-    TileGrid() {
+    public TileGrid() {
         super();
         this.initGrid();
         this.addMouseListener(this);
