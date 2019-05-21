@@ -27,6 +27,16 @@ public class AStarFinder {
         this.init();
     }
 
+    public AStarFinder(Grid grid) {
+        this.grid = grid;
+        this.allowDiagonal = true;
+        this.hType = Heuristic.Type.Euclidean;
+        this.weight = 1;
+        this.startNode = grid.getStartNode();
+        this.endNode = grid.getEndNode();
+        this.init();
+    }
+
     /**
      * Perform the A* path finding algorithm.
      * @return List of nodes from start to end nodes.
@@ -58,6 +68,7 @@ public class AStarFinder {
                     }
                 }
             }
+            grid.updateTiles();
         }
         return null;
     }
@@ -70,10 +81,12 @@ public class AStarFinder {
     }
 
     public Node[] getOpenSet() {
-        return (Node[])openSet.toArray();
+        Node[] nodes = new Node[openSet.size()];
+        return openSet.toArray(nodes);
     }
 
     public Node[] getClosedSet() {
-        return (Node[])closedSet.toArray();
+        Node[] nodes = new Node[closedSet.size()];
+        return closedSet.toArray(nodes);
     }
 }

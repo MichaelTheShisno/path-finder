@@ -1,5 +1,8 @@
 package core;
 
+import visual.Tile;
+import visual.TileGrid;
+
 import java.util.Set;
 import java.util.HashSet;
 
@@ -7,6 +10,7 @@ import java.util.HashSet;
  * Class that encapsulates the layout of the nodes it holds.
  */
 public class Grid {
+    private TileGrid tileGrid;
     private Node[][] grid;
     private Node startNode;
     private Node endNode;
@@ -14,18 +18,39 @@ public class Grid {
     private final static int[][] directions = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
     private final static int[][] diagonals = {{1, -1}, {1, 1}, {-1, 1}, {-1, -1}};
 
-    public Grid(final int ROW_COUNT, final int COL_COUNT) {
-        grid = new Node[ROW_COUNT][COL_COUNT];
+    public Grid(TileGrid tileGrid) {
+        int NUM_ROWS = tileGrid.getTileMatrix().length;
+        int NUM_COLS = tileGrid.getTileMatrix()[0].length;
+        this.tileGrid = tileGrid;
+        this.grid = new Node[NUM_ROWS][NUM_COLS];
         this.buildNodes();
     }
 
     /**
-     * Populate grid with new nodes.
+     * Populate grid with new nodes based on the grid of tiles.
      */
     private void buildNodes() {
+        Tile[][] tiles = tileGrid.getTileMatrix();
         for (int row = 0; row < grid.length; row++) {
             for (int col = 0; col < grid[0].length; col++) {
-                grid[row][col] = new Node(row, col, true);
+                switch (tiles[row][col].getStatus()) {
+                    case BLOCKED:
+                        grid[row][col] = new Node(row, col, false);
+                        break;
+                    case START:
+                        grid[row][col] = new Node(row, col, true);
+                        startNode = grid[row][col];
+                        break;
+                    case END:
+                        grid[row][col] = new Node(row, col, true);
+                        endNode = grid[row][col];
+                        break;
+                    case NORMAL:
+                        grid[row][col] = new Node(row, col, true);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
@@ -123,5 +148,9 @@ public class Grid {
             }
         }
         return neighbors;
+    }
+
+    public void updateTiles() {
+        tileGrid.refreshTiles();
     }
 }

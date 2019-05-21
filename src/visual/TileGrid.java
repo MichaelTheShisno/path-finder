@@ -1,5 +1,8 @@
 package visual;
 
+import core.*;
+import finders.AStarFinder;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -7,6 +10,8 @@ import java.awt.event.*;
 public class TileGrid extends JPanel implements IConstants, MouseListener, MouseMotionListener {
     private Tile[][] tileMatrix;
     private Tile currentTile;
+    private Grid nodeGrid;
+    private AStarFinder finder;
 
     public TileGrid() {
         super();
@@ -19,6 +24,7 @@ public class TileGrid extends JPanel implements IConstants, MouseListener, Mouse
      * Populate and create a new grid of tile objects.
      */
     private void initGrid() {
+        System.out.println("Init Grid");
         tileMatrix = new Tile[NUM_ROWS][NUM_COLS];
         this.setLayout(new GridLayout(NUM_ROWS, NUM_COLS));
         for (int row = 0; row < NUM_ROWS; row++) {
@@ -33,6 +39,22 @@ public class TileGrid extends JPanel implements IConstants, MouseListener, Mouse
 
     public void run() {
         System.out.println("Run");
+        nodeGrid = new Grid(this);
+        finder = new AStarFinder(nodeGrid);
+        finder.findPath();
+    }
+
+    public void refreshTiles() {
+        for (Node node : finder.getClosedSet()) {
+            if (!(node == nodeGrid.getStartNode() || node == nodeGrid.getEndNode())) {
+                tileMatrix[node.getRow()][node.getCol()].setStatus(Tile.STATUS.CLOSED);
+            }
+        }
+        for (Node node : finder.getOpenSet()) {
+            if (!(node == nodeGrid.getStartNode() || node == nodeGrid.getEndNode())) {
+                tileMatrix[node.getRow()][node.getCol()].setStatus(Tile.STATUS.OPEN);
+            }
+        }
     }
 
     /**
