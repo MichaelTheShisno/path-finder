@@ -5,19 +5,19 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class PathPanel extends JPanel implements IConstants, KeyListener {
-    private TileGrid grid;
+    private TileGrid tileGrid;
     private ControllerMenu menu;
     private boolean isRunning;
 
     PathPanel() {
         super();
         this.setLayout(new OverlayLayout(this));
-        grid = new TileGrid();
+        tileGrid = new TileGrid();
         menu = new ControllerMenu();
         menu.setOpaque(false);
         menu.setBackground(new Color(0, 0, 0, 0.58f));
         //this.add(menu);
-        this.add(grid);
+        this.add(tileGrid);
         this.setFocusable(true);
         this.requestFocus();
         this.addKeyListener(this);
@@ -29,10 +29,14 @@ public class PathPanel extends JPanel implements IConstants, KeyListener {
         if (exitProgramKeysPressed(e)) {
             System.exit(0);
         } else if (resetKeysPressed(e)) {
-            grid.resetGrid();
+            tileGrid.reset();
             this.repaint();
         } else if (startKeyPressed(e)) {
-            isRunning = true;
+            if (!isRunning) {
+                isRunning = true;
+                tileGrid.run();
+                isRunning = false;
+            }
         } else if (pauseKeyPressed(e)) {
             isRunning = false;
         } else if (cancelKeyPressed(e)) {
