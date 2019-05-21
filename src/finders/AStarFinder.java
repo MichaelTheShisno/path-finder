@@ -28,6 +28,7 @@ public class AStarFinder {
         PriorityQueue<Node> openSet = AStarPrep();
         Set<Node> closedSet = new HashSet<>();
         Node currentNode;
+        double tentativeG;
         // While there are still unvisited nodes...
         while (!openSet.isEmpty()) {
             currentNode = openSet.peek();
@@ -40,14 +41,12 @@ public class AStarFinder {
             // Check the neighbors of the current node node
             for (Node neighbor : grid.getNeighbors(currentNode, allowDiagonal)) {
                 if (!closedSet.contains(neighbor)) {
-                    double tentativeG = currentNode.getG() + grid.getDistanceBetween(currentNode, neighbor, weight);
+                    tentativeG = currentNode.getG() + grid.getDistanceBetween(currentNode, neighbor, weight);
+                    neighbor.setParent(currentNode);
+                    neighbor.setG(tentativeG);
                     if (!openSet.contains(neighbor)) {
-                        neighbor.setParent(currentNode);
-                        neighbor.setG(tentativeG);
                         openSet.add(neighbor);
                     } else if (tentativeG < neighbor.getG()) {
-                        neighbor.setParent(currentNode);
-                        neighbor.setG(tentativeG);
                         openSet = new PriorityQueue<>(openSet);
                     }
                 }
