@@ -6,6 +6,7 @@ import finders.AStarFinder;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TileGrid extends JPanel implements IConstants, MouseListener, MouseMotionListener {
@@ -16,6 +17,7 @@ public class TileGrid extends JPanel implements IConstants, MouseListener, Mouse
 
     public TileGrid() {
         super();
+        this.setLayout(new GridLayout(NUM_ROWS, NUM_COLS));
         this.initGrid();
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
@@ -27,7 +29,6 @@ public class TileGrid extends JPanel implements IConstants, MouseListener, Mouse
     private void initGrid() {
         System.out.println("Init Grid");
         tileMatrix = new Tile[NUM_ROWS][NUM_COLS];
-        this.setLayout(new GridLayout(NUM_ROWS, NUM_COLS));
         for (int row = 0; row < NUM_ROWS; row++) {
             for (int col = 0; col < NUM_COLS; col++) {
                 tileMatrix[row][col] = new Tile(TILE_SIZE);
@@ -38,15 +39,19 @@ public class TileGrid extends JPanel implements IConstants, MouseListener, Mouse
         tileMatrix[END_ROW][END_COL].setStatus(Tile.Status.END);
     }
 
-    public void run() {
+    public List<Node> run() {
         System.out.println("Run");
         nodeGrid = new Grid(this);
         finder = new AStarFinder(nodeGrid);
-        List<Node> path = finder.findPath();
-        for (Node node : path) {
-            tileMatrix[node.getRow()][node.getCol()].setStatus(Tile.Status.FAILED);
+        return finder.findPath();
+    }
+
+    private void getTiles(List<Node> nodes) {
+        ArrayList<Tile> tiles = new ArrayList<>();
+        for (Node node : nodes) {
+            tiles.add(tileMatrix[node.getRow()][node.getCol()]);
         }
-        System.out.println(path);
+
     }
 
     /**
