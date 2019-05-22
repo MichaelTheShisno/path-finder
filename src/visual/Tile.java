@@ -4,21 +4,21 @@ import javax.swing.JComponent;
 import java.awt.*;
 
 public class Tile extends JComponent implements IConstants {
-    public enum STATUS {
+    public enum Status {
         NORMAL, BLOCKED, START, END, OPEN, CLOSED, FAILED, TESTED
     }
 
     private final int size;
-    private STATUS status, prevStatus;
+    private Status status, prevStatus;
 
     public Tile(int size) {
         super();
         this.size = size;
-        this.status = STATUS.NORMAL;
-        this.prevStatus = STATUS.NORMAL;
+        this.status = Status.NORMAL;
+        this.prevStatus = Status.NORMAL;
     }
 
-    private static Color getTileColor(STATUS status) {
+    private static Color getTileColor(Status status) {
         switch (status) {
             case START:
                 return startColor;
@@ -39,11 +39,11 @@ public class Tile extends JComponent implements IConstants {
         }
     }
 
-    public STATUS getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(STATUS newStatus) {
+    public void setStatus(Status newStatus) {
         this.prevStatus = this.status;
         this.status = newStatus;
         this.repaint();
@@ -51,7 +51,7 @@ public class Tile extends JComponent implements IConstants {
 
     public void revertStatus() {
         this.status = this.prevStatus;
-        this.prevStatus = STATUS.NORMAL;
+        this.prevStatus = Status.NORMAL;
         this.repaint();
     }
 

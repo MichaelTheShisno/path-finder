@@ -6,6 +6,7 @@ import finders.AStarFinder;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
 
 public class TileGrid extends JPanel implements IConstants, MouseListener, MouseMotionListener {
     private Tile[][] tileMatrix;
@@ -33,28 +34,19 @@ public class TileGrid extends JPanel implements IConstants, MouseListener, Mouse
                 this.add(tileMatrix[row][col]);
             }
         }
-        tileMatrix[START_ROW][START_COL].setStatus(Tile.STATUS.START);
-        tileMatrix[END_ROW][END_COL].setStatus(Tile.STATUS.END);
+        tileMatrix[START_ROW][START_COL].setStatus(Tile.Status.START);
+        tileMatrix[END_ROW][END_COL].setStatus(Tile.Status.END);
     }
 
     public void run() {
         System.out.println("Run");
         nodeGrid = new Grid(this);
         finder = new AStarFinder(nodeGrid);
-        finder.findPath();
-    }
-
-    public void refreshTiles() {
-        for (Node node : finder.getClosedSet()) {
-            if (!(node == nodeGrid.getStartNode() || node == nodeGrid.getEndNode())) {
-                tileMatrix[node.getRow()][node.getCol()].setStatus(Tile.STATUS.CLOSED);
-            }
+        List<Node> path = finder.findPath();
+        for (Node node : path) {
+            tileMatrix[node.getRow()][node.getCol()].setStatus(Tile.Status.FAILED);
         }
-        for (Node node : finder.getOpenSet()) {
-            if (!(node == nodeGrid.getStartNode() || node == nodeGrid.getEndNode())) {
-                tileMatrix[node.getRow()][node.getCol()].setStatus(Tile.STATUS.OPEN);
-            }
-        }
+        System.out.println(path);
     }
 
     /**
@@ -83,10 +75,10 @@ public class TileGrid extends JPanel implements IConstants, MouseListener, Mouse
             currentTile = tile;
             switch (tile.getStatus()) {
                 case NORMAL:
-                    tile.setStatus(Tile.STATUS.BLOCKED);
+                    tile.setStatus(Tile.Status.BLOCKED);
                     break;
                 case BLOCKED:
-                    tile.setStatus(Tile.STATUS.NORMAL);
+                    tile.setStatus(Tile.Status.NORMAL);
                     break;
             }
         }
@@ -112,19 +104,19 @@ public class TileGrid extends JPanel implements IConstants, MouseListener, Mouse
         JComponent component = (JComponent)findComponentAt(e.getX(), e.getY());
         if (component instanceof Tile) {
             Tile tile = (Tile)component;
-            if (currentTile.getStatus() == Tile.STATUS.START) {
+            if (currentTile.getStatus() == Tile.Status.START) {
                 currentTile.revertStatus();
-                tile.setStatus(Tile.STATUS.START);
-            } else if (currentTile.getStatus() == Tile.STATUS.END) {
+                tile.setStatus(Tile.Status.START);
+            } else if (currentTile.getStatus() == Tile.Status.END) {
                 currentTile.revertStatus();
-                tile.setStatus(Tile.STATUS.END);
+                tile.setStatus(Tile.Status.END);
             } else if (!tile.equals(currentTile)) {
                 switch (tile.getStatus()) {
                     case NORMAL:
-                        tile.setStatus(Tile.STATUS.BLOCKED);
+                        tile.setStatus(Tile.Status.BLOCKED);
                         break;
                     case BLOCKED:
-                        tile.setStatus(Tile.STATUS.NORMAL);
+                        tile.setStatus(Tile.Status.NORMAL);
                         break;
                 }
             }
