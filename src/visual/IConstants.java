@@ -29,4 +29,5 @@ public interface IConstants {
     Color closedColor = new Color(175, 238, 238);
     Color failedColor = new Color(255, 136, 136);
     Color testedColor = new Color(229, 229, 229);
+    Color lineColor = Color.yellow;
 }
