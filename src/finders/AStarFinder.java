@@ -10,16 +10,16 @@ import java.util.PriorityQueue;
 
 public class AStarFinder {
     private final Grid grid;
-    private final boolean allowDiagonal;
+    private final DiagonalMovement diagonalMovement;
     private final Heuristic.Type hType;
     private final int weight;
     private final Node startNode, endNode;
     private PriorityQueue<Node> openSet;
     private Set<Node> closedSet;
 
-    public AStarFinder(Grid grid, boolean allowDiagonal, Heuristic.Type hType, int weight) {
+    public AStarFinder(Grid grid, DiagonalMovement diagonalMovement, Heuristic.Type hType, int weight) {
         this.grid = grid;
-        this.allowDiagonal = allowDiagonal;
+        this.diagonalMovement = diagonalMovement;
         this.hType = hType;
         this.weight = weight;
         this.startNode = grid.getStartNode();
@@ -28,7 +28,7 @@ public class AStarFinder {
     }
 
     public AStarFinder(Grid grid) {
-        this(grid, true, Heuristic.Type.Euclidean, 1);
+        this(grid, DiagonalMovement.ONE_OR_NO_OBSTACLES, Heuristic.Type.Euclidean, 1);
     }
 
     /**
@@ -48,7 +48,7 @@ public class AStarFinder {
             openSet.remove(currentNode);
             closedSet.add(currentNode);
             // Check the neighbors of the current node node
-            for (Node neighbor : grid.getNeighbors(currentNode, false)) {
+            for (Node neighbor : grid.getNeighbors(currentNode, diagonalMovement)) {
                 if (!closedSet.contains(neighbor)) {
                     tentativeG = currentNode.getG() + grid.getDistanceBetween(currentNode, neighbor, weight);
                     if (!openSet.contains(neighbor)) {

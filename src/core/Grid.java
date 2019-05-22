@@ -15,8 +15,8 @@ public class Grid {
     private Node startNode;
     private Node endNode;
     private final static int INFINITY = Integer.MAX_VALUE;
-    private final static int[][] directions = {{0, -1}, {1, 0}, {0, 1}, {-1, 0}};
-    private final static int[][] diagonals = {{1, -1}, {1, 1}, {-1, 1}, {-1, -1}};
+    private final static int[][] orthogonal = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+    private final static int[][] diagonal = {{-1, -1}, {-1, 1}, {1, 1}, {1, -1}};
 
     public Grid(TileGrid tileGrid) {
         int NUM_ROWS = tileGrid.getTileMatrix().length;
@@ -111,7 +111,7 @@ public class Grid {
      * Get the total distance between 2 nodes, take weight into consideration.
      * @param node1
      * @param node2
-     * @param weight
+     * @param weight Distance per unit distance.
      * @return Distance between the 2 nodes.
      */
     public double getDistanceBetween(Node node1, Node node2, int weight) {
@@ -123,34 +123,75 @@ public class Grid {
     /**
      * Get a set of all walkable immediate neighbors in the orthogonal direction.
      * If diagonal nodes are desired, include those too.
+     *
+     *   Orthogonal            Diagonal
+     * +---+---+---+        +---+---+---+
+     * |   | 0 |   |        | 0 |   | 1 |
+     * +---+---+---+        +---+---+---+
+     * | 3 | N | 1 |        |   | N |   |
+     * +---+---+---+        +---+---+---+
+     * |   | 2 |   |        | 3 |   | 2 |
+     * +---+---+---+        +---+---+---+
+     *
      * @param node The node whose neighbors we are getting.
-     * @param isDiagonal Determines whether diagonal neighbors are allowed in the search.
-     * @return
+     * @param diagonalMovement Determines how diagonal neighbors are evaluated in the search.
+     * @return Set of immediate open neighbors.
      */
-    public Set<Node> getNeighbors(Node node, boolean isDiagonal) {
+    public Set<Node> getNeighbors(Node node, DiagonalMovement diagonalMovement) {
         Set<Node> neighbors = new HashSet<>();
-        int row = node.getRow(), col = node.getCol();
         int adjRow, adjCol;
-        for (int[] direction : directions) {
+        int row = node.getRow(), col = node.getCol();
+        int orthoIndex = 0, diagIndex = 0;
+        boolean[] orthoArr = new boolean[4];
+        boolean[] diagArr = new boolean[4];
+        // Check immediate orthogonal neighbors...
+        for (int[] direction : orthogonal) {
             adjRow = row + direction[0];
             adjCol = col + direction[1];
             if (this.isWalkable(adjRow, adjCol)) {
                 neighbors.add(grid[adjRow][adjCol]);
+                orthoArr[orthoIndex] = true;
             }
+            orthoIndex++;
         }
-        if (isDiagonal) {
-            for (int[] diagonal : diagonals) {
-                adjRow = row + diagonal[0];
-                adjCol = row + diagonal[1];
-                if (this.isWalkable(adjRow, adjCol)) {
+        // If diagonal neighbors need to be taken into account...
+        if (diagonalMovement != DiagonalMovement.NEVER) {
+            // Determine if based on what Movement style the user specifies, that the diagonal neighbor is valid.
+            switch (diagonalMovement) {
+                case ALWAYS: {
+                    diagArr[0] = true;
+                    diagArr[1] = true;
+                    diagArr[2] = true;
+                    diagArr[3] = true;
+                }
+                break;
+                case ONE_OR_NO_OBSTACLES: {
+                    diagArr[0] = orthoArr[3] || orthoArr[0];
+                    diagArr[1] = orthoArr[0] || orthoArr[1];
+                    diagArr[2] = orthoArr[1] || orthoArr[2];
+                    diagArr[3] = orthoArr[2] || orthoArr[3];
+                }
+                break;
+                case NO_OBSTACLES: {
+                    diagArr[0] = orthoArr[3] && orthoArr[0];
+                    diagArr[1] = orthoArr[0] && orthoArr[1];
+                    diagArr[2] = orthoArr[1] && orthoArr[2];
+                    diagArr[3] = orthoArr[2] && orthoArr[3];
+                }
+                break;
+                default:
+                    break;
+            }
+            // Check immediate diagonal neighbors...
+            for (int[] direction : diagonal) {
+                adjRow = row + direction[0];
+                adjCol = col + direction[1];
+                if (diagArr[diagIndex] && this.isWalkable(adjRow, adjCol)) {
                     neighbors.add(grid[adjRow][adjCol]);
                 }
+                diagIndex++;
             }
         }
         return neighbors;
-    }
-
-    public void updateTiles() {
-        tileGrid.refreshTiles();
     }
 }
