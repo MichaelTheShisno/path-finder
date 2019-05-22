@@ -28,13 +28,7 @@ public class AStarFinder {
     }
 
     public AStarFinder(Grid grid) {
-        this.grid = grid;
-        this.allowDiagonal = true;
-        this.hType = Heuristic.Type.Euclidean;
-        this.weight = 1;
-        this.startNode = grid.getStartNode();
-        this.endNode = grid.getEndNode();
-        this.init();
+        this(grid, true, Heuristic.Type.Euclidean, 1);
     }
 
     /**
@@ -54,7 +48,7 @@ public class AStarFinder {
             openSet.remove(currentNode);
             closedSet.add(currentNode);
             // Check the neighbors of the current node node
-            for (Node neighbor : grid.getNeighbors(currentNode, allowDiagonal)) {
+            for (Node neighbor : grid.getNeighbors(currentNode, false)) {
                 if (!closedSet.contains(neighbor)) {
                     tentativeG = currentNode.getG() + grid.getDistanceBetween(currentNode, neighbor, weight);
                     if (!openSet.contains(neighbor)) {
@@ -68,7 +62,6 @@ public class AStarFinder {
                     }
                 }
             }
-            grid.updateTiles();
         }
         return null;
     }
