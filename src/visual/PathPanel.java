@@ -9,6 +9,7 @@ import java.util.List;
 public class PathPanel extends JPanel implements IConstants, KeyListener {
     private TileGrid tileGrid;
     private ControllerMenu menu;
+    private List<Line> lines;
     private boolean isRunning;
 
     PathPanel() {
@@ -33,11 +34,15 @@ public class PathPanel extends JPanel implements IConstants, KeyListener {
         } else if (resetKeysPressed(e)) {
             this.reset();
             this.repaint();
+        }
+        else if (clearKeysPressed(e)) {
+            this.clear();
+            this.repaint();
         } else if (startKeyPressed(e)) {
             if (!isRunning) {
                 isRunning = true;
                 List<Tile> tiles = tileGrid.run();
-                List<Line> lines = this.getLines(tiles);
+                this.lines = this.getLines(tiles);
                 this.drawPath(lines);
                 isRunning = false;
             }
@@ -53,7 +58,6 @@ public class PathPanel extends JPanel implements IConstants, KeyListener {
         for (int i = 0; i < tiles.size()-1; i++) {
             lines.add(new Line(tiles.get(i), tiles.get(i+1)));
         }
-        System.out.println(lines);
         return lines;
     }
 
@@ -61,8 +65,8 @@ public class PathPanel extends JPanel implements IConstants, KeyListener {
         this.remove(tileGrid);
         for (Line line : lines) {
             this.add(line);
-            this.repaint();
         }
+        this.repaint();
         this.add(tileGrid);
         this.updateUI();
     }
@@ -72,6 +76,14 @@ public class PathPanel extends JPanel implements IConstants, KeyListener {
         this.updateUI();
         this.add(tileGrid);
         tileGrid.reset();
+    }
+
+    private void clear() {
+        for (Line line : lines) {
+            this.remove(line);
+        }
+        this.repaint();
+        this.updateUI();
     }
 
     @Override
@@ -99,7 +111,16 @@ public class PathPanel extends JPanel implements IConstants, KeyListener {
      * @return Returns if any of the reset keys are hit.
      */
     private boolean resetKeysPressed(KeyEvent e) {
-        return !isRunning && (e.getKeyChar() == KeyEvent.VK_R || e.getKeyChar() == KeyEvent.VK_C);
+        return !isRunning && (e.getKeyChar() == KeyEvent.VK_R);
+    }
+
+    /**
+     * Check if a key event is a clear event.
+     * @param e KeyEvent
+     * @return Returns if any of the clear keys are hit.
+     */
+    private boolean clearKeysPressed(KeyEvent e) {
+        return !isRunning && (e.getKeyChar() == KeyEvent.VK_C);
     }
 
     /**
