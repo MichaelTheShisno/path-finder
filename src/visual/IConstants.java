@@ -3,6 +3,9 @@ package visual;
 import java.awt.Color;
 import java.awt.Toolkit;
 
+/**
+ * Interface used to store constants used by all visual classes.
+ */
 public interface IConstants {
     int SCREEN_WIDTH = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
     int SCREEN_HEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();

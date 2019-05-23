@@ -2,6 +2,9 @@ package visual;
 
 import javax.swing.*;
 
+/**
+ * Frame which contains the main content frame.
+ */
 public class PathFrame extends JFrame implements IConstants {
     public PathFrame() {
         super();

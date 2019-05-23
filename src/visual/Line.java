@@ -3,6 +3,9 @@ package visual;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Class that is used to draw a line from one tile to another.
+ */
 public class Line extends JComponent implements IConstants {
     private final int r1, c1;
     private final int r2, c2;

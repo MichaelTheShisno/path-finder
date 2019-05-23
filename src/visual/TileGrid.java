@@ -9,6 +9,9 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class that manages and draws tiles onto the screen.
+ */
 public class TileGrid extends JPanel implements IConstants, MouseListener, MouseMotionListener {
     private Tile[][] tileMatrix;
     private Tile currentTile;

@@ -6,6 +6,10 @@ import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class that provides an overlay of JPanels and JComponents.
+ * Handles key inputs.
+ */
 public class PathPanel extends JPanel implements IConstants, KeyListener {
     private TileGrid tileGrid;
     private ControllerMenu menu;
@@ -37,7 +41,7 @@ public class PathPanel extends JPanel implements IConstants, KeyListener {
         }
         else if (clearKeysPressed(e)) {
             this.clear();
-            this.repaint();
+            //this.repaint();
         } else if (startKeyPressed(e)) {
             if (!isRunning) {
                 isRunning = true;
@@ -53,6 +57,11 @@ public class PathPanel extends JPanel implements IConstants, KeyListener {
         }
     }
 
+    /**
+     * Get the list of lines that correspond to the path between nodes.
+     * @param tiles List of tiles that correspond to the path.
+     * @return List of lines.
+     */
     private List<Line> getLines(List<Tile> tiles) {
         ArrayList<Line> lines = new ArrayList<>();
         for (int i = 0; i < tiles.size()-1; i++) {
@@ -61,6 +70,10 @@ public class PathPanel extends JPanel implements IConstants, KeyListener {
         return lines;
     }
 
+    /**
+     * Add lines from path starting from the start node to the end node.
+     * @param lines List of lines to add to the canvas
+     */
     private void drawPath(List<Line> lines) {
         this.remove(tileGrid);
         for (Line line : lines) {
@@ -71,6 +84,9 @@ public class PathPanel extends JPanel implements IConstants, KeyListener {
         this.updateUI();
     }
 
+    /**
+     * Reset the grid to its initial state.
+     */
     private void reset() {
         this.removeAll();
         this.updateUI();
@@ -78,10 +94,14 @@ public class PathPanel extends JPanel implements IConstants, KeyListener {
         tileGrid.reset();
     }
 
+    /**
+     * Clear path lines from the grid.
+     */
     private void clear() {
         for (Line line : lines) {
             this.remove(line);
         }
+        lines.clear();
         this.repaint();
         this.updateUI();
     }

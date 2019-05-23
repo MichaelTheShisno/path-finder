@@ -3,6 +3,9 @@ package visual;
 import javax.swing.JComponent;
 import java.awt.*;
 
+/**
+ * Class that provides an abstraction of the tiles which are laid out on the grid.
+ */
 public class Tile extends JComponent implements IConstants {
     public enum Status {
         NORMAL, BLOCKED, START, END, OPEN, CLOSED, FAILED, TESTED
