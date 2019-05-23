@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.HashSet;
 
 /**
- * Class that encapsulates the layout of the nodes it holds.
+ * Abstraction layer of the grid of nodes.
  */
 public class Grid {
     private TileGrid tileGrid;
@@ -109,9 +109,9 @@ public class Grid {
 
     /**
      * Get the total distance between 2 nodes, take weight into consideration.
-     * @param node1
-     * @param node2
-     * @param weight Distance per unit distance.
+     * @param node1 Node 1
+     * @param node2 Node 2
+     * @param weight Amount per unit distance.
      * @return Distance between the 2 nodes.
      */
     public double getDistanceBetween(Node node1, Node node2, int weight) {

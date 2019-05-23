@@ -7,7 +7,9 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.PriorityQueue;
 
-
+/**
+ * Class that performs the A* Path Finding Algorithm.
+ */
 public class AStarFinder {
     private final Grid grid;
     private final DiagonalMovement diagonalMovement;
@@ -17,6 +19,13 @@ public class AStarFinder {
     private PriorityQueue<Node> openSet;
     private Set<Node> closedSet;
 
+    /**
+     * Loaded Constructor that takes in necessary data for the search algorithm. Initializes the search algorithm.
+     * @param grid Grid of nodes that will be used to path find.
+     * @param diagonalMovement Mode in which neighboring nodes in the diagonal directions will be chosen.
+     * @param hType Mode in which the hScore heuristics of each node will be calculated.
+     * @param weight Amount per unit distance.
+     */
     public AStarFinder(Grid grid, DiagonalMovement diagonalMovement, Heuristic.Type hType, int weight) {
         this.grid = grid;
         this.diagonalMovement = diagonalMovement;
@@ -27,6 +36,10 @@ public class AStarFinder {
         this.init();
     }
 
+    /**
+     * Default Constructor that takes in necessary data for the search algorithm. Initializes the search algorithm.
+     * @param grid Grid of nodes that will be used to path find.
+     */
     public AStarFinder(Grid grid) {
         this(grid, DiagonalMovement.ONE_OR_NO_OBSTACLES, Heuristic.Type.Euclidean, 1);
     }
@@ -66,6 +79,9 @@ public class AStarFinder {
         return null;
     }
 
+    /**
+     * Helper method used to set up the path finding process.
+     */
     private void init() {
         grid.init(hType);
         closedSet = new HashSet<>();
@@ -73,11 +89,19 @@ public class AStarFinder {
         openSet.add(startNode);
     }
 
+    /**
+     * Get the current set of nodes to be evaluated.
+     * @return Array of nodes
+     */
     public Node[] getOpenSet() {
         Node[] nodes = new Node[openSet.size()];
         return openSet.toArray(nodes);
     }
 
+    /**
+     * Get the current set of nodes already evaluated.
+     * @return Array of nodes
+     */
     public Node[] getClosedSet() {
         Node[] nodes = new Node[closedSet.size()];
         return closedSet.toArray(nodes);
