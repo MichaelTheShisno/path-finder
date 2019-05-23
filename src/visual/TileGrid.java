@@ -39,19 +39,21 @@ public class TileGrid extends JPanel implements IConstants, MouseListener, Mouse
         tileMatrix[END_ROW][END_COL].setStatus(Tile.Status.END);
     }
 
-    public List<Node> run() {
+    public List<Tile> run() {
         System.out.println("Run");
         nodeGrid = new Grid(this);
         finder = new AStarFinder(nodeGrid);
-        return finder.findPath();
+        List<Node> path = finder.findPath();
+        System.out.println(path);
+        return getTiles(path);
     }
 
-    private void getTiles(List<Node> nodes) {
+    private ArrayList<Tile> getTiles(List<Node> nodes) {
         ArrayList<Tile> tiles = new ArrayList<>();
         for (Node node : nodes) {
             tiles.add(tileMatrix[node.getRow()][node.getCol()]);
         }
-
+        return tiles;
     }
 
     /**

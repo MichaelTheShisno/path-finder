@@ -3,6 +3,8 @@ package visual;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PathPanel extends JPanel implements IConstants, KeyListener {
     private TileGrid tileGrid;
@@ -29,12 +31,14 @@ public class PathPanel extends JPanel implements IConstants, KeyListener {
         if (exitProgramKeysPressed(e)) {
             System.exit(0);
         } else if (resetKeysPressed(e)) {
-            tileGrid.reset();
+            this.reset();
             this.repaint();
         } else if (startKeyPressed(e)) {
             if (!isRunning) {
                 isRunning = true;
-                tileGrid.run();
+                List<Tile> tiles = tileGrid.run();
+                List<Line> lines = this.getLines(tiles);
+                this.drawPath(lines);
                 isRunning = false;
             }
         } else if (pauseKeyPressed(e)) {
@@ -42,6 +46,32 @@ public class PathPanel extends JPanel implements IConstants, KeyListener {
         } else if (cancelKeyPressed(e)) {
             isRunning = false;
         }
+    }
+
+    private List<Line> getLines(List<Tile> tiles) {
+        ArrayList<Line> lines = new ArrayList<>();
+        for (int i = 0; i < tiles.size()-1; i++) {
+            lines.add(new Line(tiles.get(i), tiles.get(i+1)));
+        }
+        System.out.println(lines);
+        return lines;
+    }
+
+    private void drawPath(List<Line> lines) {
+        this.remove(tileGrid);
+        for (Line line : lines) {
+            this.add(line);
+            this.repaint();
+        }
+        this.add(tileGrid);
+        this.updateUI();
+    }
+
+    private void reset() {
+        this.removeAll();
+        this.updateUI();
+        this.add(tileGrid);
+        tileGrid.reset();
     }
 
     @Override
