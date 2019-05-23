@@ -23,7 +23,7 @@ public class Line extends JComponent implements IConstants {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
-        g2.setStroke(new BasicStroke(3));
+        g2.setStroke(new BasicStroke(STROKE_WIDTH));
         g2.setColor(lineColor);
         g2.drawLine(r1, c1, r2, c2);
     }

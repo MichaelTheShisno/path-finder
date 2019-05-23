@@ -17,6 +17,7 @@ public interface IConstants {
     int MENU_Y = TILE_SIZE;
     int MENU_WIDTH = SCREEN_WIDTH / 2;
     int MENU_HEIGHT = (8 * SCREEN_HEIGHT) / 45;
+    int STROKE_WIDTH = (TILE_SIZE / 8);
 
     // Menu Colors
     Color menuBackgroundColor = new Color(0, 0, 0, 0.35f);
