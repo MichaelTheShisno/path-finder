@@ -9,7 +9,7 @@ import java.util.List;
 public class SearchData {
     private List<Node> path;                /* Path from start to end node */
     private List<Node[]> openSetList;       /* List of each iterations set of open nodes */
-    private List<Node[]> closedSetList;     /* List of each iterations set of closed nodes */
+    private List<Node> closedSetList;     /* List of each iterations set of closed nodes */
 
     public SearchData() {
         path = new ArrayList<>();
@@ -25,7 +25,7 @@ public class SearchData {
         return openSetList;
     }
 
-    public List<Node[]> getClosedsetList() {
+    public List<Node> getClosedsetList() {
         return closedSetList;
     }
 
@@ -33,11 +33,9 @@ public class SearchData {
         this.path = path;
     }
 
-    public void addOpenSet(Node[] openSet) {
-        closedSetList.add(openSet);
-    }
+    public void addOpenIteration(Node[] openSetIteration) { openSetList.add(openSetIteration); }
 
-    public void addClosedSet(Node[] closedSet) {
-        closedSetList.add(closedSet);
+    public void addClosedIteration(Node closedSetIteration) {
+        closedSetList.add(closedSetIteration);
     }
 }

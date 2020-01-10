@@ -1,12 +1,17 @@
 package visual;
 
 import core.Grid;
+import core.Node;
 import core.SearchData;
 import finders.AStarFinder;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.Timer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,11 +19,16 @@ import java.util.List;
  * Class that provides an overlay of JPanels and JComponents.
  * Handles key inputs.
  */
-public class PathPanel extends JPanel implements IConstants, KeyListener {
+public class PathPanel extends JPanel implements IConstants, KeyListener, ActionListener {
     private TileGrid tileGrid;
+    private Grid grid;
     private ControllerMenu menu;
     private List<Line> lines;
     private boolean isRunning;
+    private boolean isAnimating;
+    private SearchData results;
+    private int iterationIndex;
+    private Timer timer;
 
     PathPanel() {
         super();
@@ -33,30 +43,71 @@ public class PathPanel extends JPanel implements IConstants, KeyListener {
         this.requestFocus();
         this.addKeyListener(this);
         isRunning = false;
+        isAnimating = false;
+        iterationIndex = 0;
+        results = null;
+        timer = new Timer(1, this);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent actionEvent) {
+        if (!isRunning && results != null) {
+            if (iterationIndex < results.getOpenSetList().size()) {
+                // Paint the current iteration of open neighbor nodes.
+                Node[] openSet = results.getOpenSetList().get(iterationIndex);
+                Tile[][] tileMatrix = tileGrid.getTileMatrix();
+                for (Node openNode : openSet) {
+                    if (!(openNode.equals(grid.getStartNode()) || openNode.equals(grid.getEndNode()))) {
+                        tileMatrix[openNode.getRow()][openNode.getCol()].setStatus(Tile.Status.OPEN);
+                    }
+                }
+                // Paint the current iteration of closed nodes.
+                Node closedNode = results.getClosedsetList().get(iterationIndex);
+                if (!(closedNode.equals(grid.getStartNode()) || closedNode.equals(grid.getEndNode()))) {
+                    tileMatrix[closedNode.getRow()][closedNode.getCol()].setStatus(Tile.Status.CLOSED);
+                }
+                iterationIndex++;
+            } else {
+                isAnimating = false;
+                this.lines = this.getLines(tileGrid.getTiles(results.getPath()));
+                this.drawPath(lines);
+                timer.stop();
+            }
+        } else {
+            isAnimating = false;
+            timer.stop();
+        }
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
         if (exitProgramKeysPressed(e)) {
+            System.out.println("Exit");
             System.exit(0);
         } else if (resetKeysPressed(e)) {
+            System.out.println("Reset");
             this.reset();
             this.repaint();
         }
         else if (clearKeysPressed(e)) {
+            System.out.println("Clear");
             this.clear();
         } else if (startKeyPressed(e)) {
             if (!isRunning) {
                 isRunning = true;
                 System.out.println("Run");
-                AStarFinder aStar = new AStarFinder(new Grid(tileGrid));
-                SearchData results = aStar.findPath();
-                if (results != null) {
-                    System.out.println(results.getPath());
-                    this.lines = this.getLines(tileGrid.getTiles(results.getPath()));
-                    this.drawPath(lines);
-                }
+                grid = new Grid(tileGrid);
+                AStarFinder aStar = new AStarFinder(grid);
+                results = aStar.findPath();
                 isRunning = false;
+                if (results != null) {
+                    System.out.println("Path Found");
+                    System.out.println(results.getPath());
+                    timer.start();
+                    isAnimating = true;
+                } else {
+                    System.out.println("No Path Exists");
+                }
             }
         } else if (pauseKeyPressed(e)) {
             isRunning = false;
@@ -100,6 +151,8 @@ public class PathPanel extends JPanel implements IConstants, KeyListener {
         this.updateUI();
         this.add(tileGrid);
         tileGrid.reset();
+        iterationIndex = 0;
+        results = null;
     }
 
     /**
@@ -112,6 +165,8 @@ public class PathPanel extends JPanel implements IConstants, KeyListener {
         lines.clear();
         this.repaint();
         this.updateUI();
+        iterationIndex = 0;
+        results = null;
     }
 
     @Override

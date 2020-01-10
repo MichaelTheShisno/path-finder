@@ -2,10 +2,7 @@ package finders;
 
 import core.*;
 
-import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.PriorityQueue;
+import java.util.*;
 
 /**
  * Class that performs the A* Path Finding Algorithm.
@@ -50,6 +47,7 @@ public class AStarFinder {
      */
     public SearchData findPath() {
         SearchData searchData = new SearchData();
+        List<Node> openNeighborList = new ArrayList<>();
         Node currentNode;
         double tentativeG;
         // While there are still unvisited nodes...
@@ -62,7 +60,7 @@ public class AStarFinder {
             // Move current node from openSet to closedSet.
             openSet.remove(currentNode);
             closedSet.add(currentNode);
-            searchData.addClosedSet(getClosedSet());
+            searchData.addClosedIteration(currentNode);
             // Check the neighbors of the current node node
             for (Node neighbor : grid.getNeighbors(currentNode, diagonalMovement)) {
                 if (!closedSet.contains(neighbor)) {
@@ -71,6 +69,7 @@ public class AStarFinder {
                         neighbor.setParent(currentNode);
                         neighbor.setG(tentativeG);
                         openSet.add(neighbor);
+                        openNeighborList.add(neighbor);
                     } else if (tentativeG < neighbor.getG()) {
                         neighbor.setParent(currentNode);
                         neighbor.setG(tentativeG);
@@ -78,7 +77,8 @@ public class AStarFinder {
                     }
                 }
             }
-            searchData.addOpenSet(getOpenSet());
+            searchData.addOpenIteration(getOpenIteration(openNeighborList));
+            openNeighborList.clear();
         }
         return null;
     }
@@ -97,9 +97,9 @@ public class AStarFinder {
      * Get the current set of nodes to be evaluated.
      * @return Array of nodes
      */
-    public Node[] getOpenSet() {
-        Node[] nodes = new Node[openSet.size()];
-        return openSet.toArray(nodes);
+    public Node[] getOpenIteration(List<Node> openIteration) {
+        Node[] nodes = new Node[openIteration.size()];
+        return openIteration.toArray(nodes);
     }
 
     /**
