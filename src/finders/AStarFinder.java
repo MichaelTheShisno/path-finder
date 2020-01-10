@@ -48,18 +48,21 @@ public class AStarFinder {
      * Perform the A* path finding algorithm.
      * @return List of nodes from start to end nodes.
      */
-    public List<Node> findPath() {
+    public SearchData findPath() {
+        SearchData searchData = new SearchData();
         Node currentNode;
         double tentativeG;
         // While there are still unvisited nodes...
         while (!openSet.isEmpty()) {
             currentNode = openSet.peek();
             if (currentNode.equals(endNode)) {
-                return Util.backtrace(currentNode);
+                searchData.setPath(Util.backtrace(currentNode));
+                return searchData;
             }
             // Move current node from openSet to closedSet.
             openSet.remove(currentNode);
             closedSet.add(currentNode);
+            searchData.addClosedSet(getClosedSet());
             // Check the neighbors of the current node node
             for (Node neighbor : grid.getNeighbors(currentNode, diagonalMovement)) {
                 if (!closedSet.contains(neighbor)) {
@@ -75,6 +78,7 @@ public class AStarFinder {
                     }
                 }
             }
+            searchData.addOpenSet(getOpenSet());
         }
         return null;
     }

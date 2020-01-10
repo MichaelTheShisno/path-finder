@@ -10,7 +10,6 @@ import java.util.HashSet;
  * Abstraction layer of the grid of nodes.
  */
 public class Grid {
-    private TileGrid tileGrid;
     private Node[][] grid;
     private Node startNode;
     private Node endNode;
@@ -19,18 +18,19 @@ public class Grid {
     private final static int[][] diagonal = {{-1, -1}, {-1, 1}, {1, 1}, {1, -1}};
 
     public Grid(TileGrid tileGrid) {
-        int NUM_ROWS = tileGrid.getTileMatrix().length;
-        int NUM_COLS = tileGrid.getTileMatrix()[0].length;
-        this.tileGrid = tileGrid;
+        Tile[][] tiles = tileGrid.getTileMatrix();
+        int NUM_ROWS = tiles.length;
+        int NUM_COLS = tiles[0].length;
         this.grid = new Node[NUM_ROWS][NUM_COLS];
-        this.buildNodes();
+        this.buildNodes(tiles);
     }
 
     /**
      * Populate grid with new nodes based on the grid of tiles.
+     * @param tiles arrangement of tiles as made in the UI,
+     *              recreate grid of nodes based on grid of tiles
      */
-    private void buildNodes() {
-        Tile[][] tiles = tileGrid.getTileMatrix();
+    private void buildNodes(Tile[][] tiles) {
         for (int row = 0; row < grid.length; row++) {
             for (int col = 0; col < grid[0].length; col++) {
                 switch (tiles[row][col].getStatus()) {

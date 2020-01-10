@@ -1,7 +1,6 @@
 package visual;
 
 import core.*;
-import finders.AStarFinder;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,15 +14,14 @@ import java.util.List;
 public class TileGrid extends JPanel implements IConstants, MouseListener, MouseMotionListener {
     private Tile[][] tileMatrix;
     private Tile currentTile;
-    private Grid nodeGrid;
-    private AStarFinder finder;
 
     public TileGrid() {
         super();
         this.setLayout(new GridLayout(NUM_ROWS, NUM_COLS));
-        this.initGrid();
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
+
+        this.initGrid();
     }
 
     /**
@@ -42,16 +40,10 @@ public class TileGrid extends JPanel implements IConstants, MouseListener, Mouse
         tileMatrix[END_ROW][END_COL].setStatus(Tile.Status.END);
     }
 
-    public List<Tile> run() {
-        System.out.println("Run");
-        nodeGrid = new Grid(this);
-        finder = new AStarFinder(nodeGrid);
-        List<Node> path = finder.findPath();
-        System.out.println(path);
-        return getTiles(path);
-    }
-
-    private ArrayList<Tile> getTiles(List<Node> nodes) {
+    /**
+     * Convert from a list of nodes to its respective list of tiles.
+     */
+    public ArrayList<Tile> getTiles(List<Node> nodes) {
         ArrayList<Tile> tiles = new ArrayList<>();
         for (Node node : nodes) {
             tiles.add(tileMatrix[node.getRow()][node.getCol()]);

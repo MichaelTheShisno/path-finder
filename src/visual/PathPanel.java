@@ -1,5 +1,9 @@
 package visual;
 
+import core.Grid;
+import core.SearchData;
+import finders.AStarFinder;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -41,13 +45,17 @@ public class PathPanel extends JPanel implements IConstants, KeyListener {
         }
         else if (clearKeysPressed(e)) {
             this.clear();
-            //this.repaint();
         } else if (startKeyPressed(e)) {
             if (!isRunning) {
                 isRunning = true;
-                List<Tile> tiles = tileGrid.run();
-                this.lines = this.getLines(tiles);
-                this.drawPath(lines);
+                System.out.println("Run");
+                AStarFinder aStar = new AStarFinder(new Grid(tileGrid));
+                SearchData results = aStar.findPath();
+                if (results != null) {
+                    System.out.println(results.getPath());
+                    this.lines = this.getLines(tileGrid.getTiles(results.getPath()));
+                    this.drawPath(lines);
+                }
                 isRunning = false;
             }
         } else if (pauseKeyPressed(e)) {
