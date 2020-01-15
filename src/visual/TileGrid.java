@@ -60,6 +60,16 @@ public class TileGrid extends JPanel implements IConstants, MouseListener, Mouse
         this.initGrid();
     }
 
+    public void clearPath() {
+        for (Tile[] tileRow : tileMatrix) {
+            for (Tile tile : tileRow) {
+                if (tile.getStatus() == Tile.Status.OPEN || tile.getStatus() == Tile.Status.CLOSED) {
+                    tile.setStatus(Tile.Status.NORMAL);
+                }
+            }
+        }
+    }
+
     public Tile[][] getTileMatrix() {
         return tileMatrix;
     }

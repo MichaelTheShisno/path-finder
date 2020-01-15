@@ -25,7 +25,7 @@ public class SearchData {
         return openSetList;
     }
 
-    public List<Node> getClosedsetList() {
+    public List<Node> getClosedSetList() {
         return closedSetList;
     }
 

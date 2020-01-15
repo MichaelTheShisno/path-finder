@@ -62,7 +62,7 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
                     }
                 }
                 // Paint the current iteration of closed nodes.
-                Node closedNode = results.getClosedsetList().get(iterationIndex);
+                Node closedNode = results.getClosedSetList().get(iterationIndex);
                 if (!(closedNode.equals(grid.getStartNode()) || closedNode.equals(grid.getEndNode()))) {
                     tileMatrix[closedNode.getRow()][closedNode.getCol()].setStatus(Tile.Status.CLOSED);
                 }
@@ -159,12 +159,23 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
      * Clear path lines from the grid.
      */
     private void clear() {
+        clearPath();
+        this.repaint();
+        this.updateUI();
+    }
+
+    /**
+     * Clear all lines and reset all open and closed nodes in the tile grid.
+     */
+    private void clearPath() {
+        // Clear lines from grid.
         for (Line line : lines) {
             this.remove(line);
         }
         lines.clear();
-        this.repaint();
-        this.updateUI();
+        // Reset open and closed nodes back to unblocked nodes.
+        tileGrid.clearPath();
+        // Reset animation variables.
         iterationIndex = 0;
         results = null;
     }
