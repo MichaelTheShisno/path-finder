@@ -97,10 +97,12 @@ public class TileGrid extends JPanel implements IConstants, MouseListener, Mouse
             Tile tile = (Tile)component;
             switch (tile.getStatus()) {
                 case NORMAL:
+                case OPEN:
+                case CLOSED:
                     tile.setStatus(Tile.Status.BLOCKED);
                     break;
                 case BLOCKED:
-                    tile.setStatus(Tile.Status.NORMAL);
+                    tile.revertStatus();
                     break;
             }
             currentTile = tile;
@@ -147,10 +149,16 @@ public class TileGrid extends JPanel implements IConstants, MouseListener, Mouse
                             tile.setStatus(Tile.Status.BLOCKED);
                         }
                         break;
-                    // Destroying walls (Blocked -> Normal).
+                    // Destroying walls (Blocked -> Previous Status).
                     case BLOCKED:
                         if (tile.getStatus() != currentTile.getStatus()) {
-                            tile.setStatus(Tile.Status.NORMAL);
+                            tile.revertStatus();
+                        }
+                        break;
+                    case OPEN:
+                    case CLOSED:
+                        if (tile.getStatus() != currentTile.getStatus()) {
+                            tile.setStatus(currentTile.getStatus());
                         }
                         break;
                 }

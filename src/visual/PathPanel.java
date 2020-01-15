@@ -130,6 +130,7 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
     }
 
     /**
+     * TODO: Move line drawing responsibility to TileGrid
      * Add lines from path starting from the start node to the end node.
      * @param lines List of lines to add to the canvas
      */
@@ -169,10 +170,12 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
      */
     private void clearPath() {
         // Clear lines from grid.
-        for (Line line : lines) {
-            this.remove(line);
+        if (lines != null) {
+            for (Line line : lines) {
+                this.remove(line);
+            }
+            lines.clear();
         }
-        lines.clear();
         // Reset open and closed nodes back to unblocked nodes.
         tileGrid.clearPath();
         // Reset animation variables.
