@@ -60,6 +60,9 @@ public class TileGrid extends JPanel implements IConstants, MouseListener, Mouse
         this.initGrid();
     }
 
+    /**
+     * Clear off open and closed nodes from previous run.
+     */
     public void clearPath() {
         for (Tile[] tileRow : tileMatrix) {
             for (Tile tile : tileRow) {
@@ -70,6 +73,10 @@ public class TileGrid extends JPanel implements IConstants, MouseListener, Mouse
         }
     }
 
+    /**
+     * Get the 2d matrix of tiles.
+     * @return tileMatrix
+     */
     public Tile[][] getTileMatrix() {
         return tileMatrix;
     }
@@ -79,12 +86,15 @@ public class TileGrid extends JPanel implements IConstants, MouseListener, Mouse
 
     }
 
+    /**
+     * Track and reflect clicking changes made to the grid UI.
+     * @param e mouse event
+     */
     @Override
     public void mousePressed(MouseEvent e) {
         JComponent component = (JComponent)findComponentAt(e.getX(), e.getY());
         if (component instanceof Tile) {
             Tile tile = (Tile)component;
-            currentTile = tile;
             switch (tile.getStatus()) {
                 case NORMAL:
                     tile.setStatus(Tile.Status.BLOCKED);
@@ -93,6 +103,7 @@ public class TileGrid extends JPanel implements IConstants, MouseListener, Mouse
                     tile.setStatus(Tile.Status.NORMAL);
                     break;
             }
+            currentTile = tile;
         }
     }
 
@@ -111,24 +122,36 @@ public class TileGrid extends JPanel implements IConstants, MouseListener, Mouse
 
     }
 
+    /**
+     * Track and reflect dragging changes made to the grid UI.
+     * @param e mouse event
+     */
     @Override
     public void mouseDragged(MouseEvent e) {
         JComponent component = (JComponent)findComponentAt(e.getX(), e.getY());
         if (component instanceof Tile) {
             Tile tile = (Tile)component;
             if (currentTile.getStatus() == Tile.Status.START) {
+                // Dragging around the start node.
                 currentTile.revertStatus();
                 tile.setStatus(Tile.Status.START);
             } else if (currentTile.getStatus() == Tile.Status.END) {
+                // Dragging around the end node.
                 currentTile.revertStatus();
                 tile.setStatus(Tile.Status.END);
             } else if (!tile.equals(currentTile)) {
                 switch (tile.getStatus()) {
+                    // Creating walls (Normal -> Blocked).
                     case NORMAL:
-                        tile.setStatus(Tile.Status.BLOCKED);
+                        if (tile.getStatus() != currentTile.getStatus()) {
+                            tile.setStatus(Tile.Status.BLOCKED);
+                        }
                         break;
+                    // Destroying walls (Blocked -> Normal).
                     case BLOCKED:
-                        tile.setStatus(Tile.Status.NORMAL);
+                        if (tile.getStatus() != currentTile.getStatus()) {
+                            tile.setStatus(Tile.Status.NORMAL);
+                        }
                         break;
                 }
             }

@@ -69,8 +69,8 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
                 iterationIndex++;
             } else {
                 isAnimating = false;
-                this.lines = this.getLines(tileGrid.getTiles(results.getPath()));
-                this.drawPath(lines);
+                lines = this.getLines(tileGrid.getTiles(results.getPath()));
+                drawPath(lines);
                 timer.stop();
             }
         } else {
