@@ -78,11 +78,9 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
      * Clear all lines and reset all open and closed nodes in the tile grid.
      */
     private void clearPath() {
+        this.removeAll();
         // Clear lines from grid.
         if (lines != null) {
-            for (Line line : lines) {
-                remove(line);
-            }
             lines.clear();
         }
         // Reset open and closed nodes back to unblocked nodes.
@@ -91,6 +89,7 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
         iterationIndex = 0;
         results = null;
         // Reflect changes on grid UI.
+        this.add(tileGrid);
         repaint();
         updateUI();
     }
@@ -99,11 +98,9 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
      * Reset the grid to its initial state.
      */
     private void clearWalls() {
+        this.removeAll();
         // Clear lines from grid.
         if (lines != null) {
-            for (Line line : lines) {
-                remove(line);
-            }
             lines.clear();
         }
         // Reset nodes back to normal.
@@ -112,8 +109,22 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
         iterationIndex = 0;
         results = null;
         // Reflect changes on grid UI.
+        this.add(tileGrid);
         repaint();
         updateUI();
+    }
+
+    private void setTimerSpeed() {
+        int delay;
+        double percentDone = (double)(iterationIndex+1)/results.getOpenSetList().size();
+        if (percentDone < 0.2) {
+            delay = (int)(Math.pow(percentDone-0.2, 2) * 1000) + 1;
+        } else if (0.8 <= percentDone) {
+            delay = (int)(Math.pow(percentDone-0.8, 2) * 1000) + 1;
+        } else {
+            delay = 1;
+        }
+        timer.setDelay(delay);
     }
 
     /**
@@ -140,6 +151,7 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
                 if (!(closedNode.equals(grid.getStartNode()) || closedNode.equals(grid.getEndNode()))) {
                     tileMatrix[closedNode.getRow()][closedNode.getCol()].setStatus(Tile.Status.CLOSED);
                 }
+                setTimerSpeed();
                 iterationIndex++;
             } else {
                 // Done animating, draw the lines that show the resulting path.
