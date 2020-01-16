@@ -2,7 +2,12 @@ package finders;
 
 import core.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.PriorityQueue;
+
 
 /**
  * Class that performs the A* Path Finding Algorithm.
@@ -100,14 +105,5 @@ public class AStarFinder {
     public Node[] getOpenIteration(List<Node> openIteration) {
         Node[] nodes = new Node[openIteration.size()];
         return openIteration.toArray(nodes);
-    }
-
-    /**
-     * Get the current set of nodes already evaluated.
-     * @return Array of nodes
-     */
-    public Node[] getClosedSet() {
-        Node[] nodes = new Node[closedSet.size()];
-        return closedSet.toArray(nodes);
     }
 }
