@@ -31,15 +31,16 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
     PathPanel() {
         super();
         this.setLayout(new OverlayLayout(this));
+
         tileGrid = new TileGrid();
         menu = new ControllerMenu();
-        menu.setOpaque(false);
-        menu.setBackground(new Color(0, 0, 0, 0.58f));
-        //this.add(menu);
+
+        this.add(menu);
         this.add(tileGrid);
         this.setFocusable(true);
         this.requestFocus();
         this.addKeyListener(this);
+
         isRunning = false;
         isAnimating = false;
         iterationIndex = 0;

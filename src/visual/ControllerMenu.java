@@ -5,8 +5,9 @@ import java.awt.*;
 
 public class ControllerMenu extends JPanel implements IConstants {
     public ControllerMenu() {
-        super();
-        this.setSize(MENU_WIDTH, MENU_HEIGHT);
+        setOpaque(false);
+        setSize(MENU_WIDTH, MENU_HEIGHT);
+        setBackground(new Color(0, 0, 0, 0.58f));
     }
 
     @Override
@@ -14,7 +15,9 @@ public class ControllerMenu extends JPanel implements IConstants {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
         g2.setColor(menuBackgroundColor);
-        Rectangle rect = new Rectangle(MENU_X, MENU_Y, MENU_WIDTH, MENU_HEIGHT);
+        Rectangle rect = new Rectangle();
         g2.fill(rect);
+        g2.setColor(Color.BLACK);
+        g2.draw(rect);
     }
 }

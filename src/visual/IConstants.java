@@ -9,8 +9,8 @@ import java.awt.Toolkit;
 public interface IConstants {
     int SCREEN_WIDTH = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
     int SCREEN_HEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
-    int NUM_ROWS = 45;
-    int NUM_COLS = 80;
+    int NUM_ROWS = 25;
+    int NUM_COLS = 40;
     int TILE_SIZE = SCREEN_HEIGHT/TileGrid.NUM_ROWS;
     int START_ROW = NUM_ROWS / 2;
     int START_COL = NUM_COLS / 4;
