@@ -9,18 +9,19 @@ import java.awt.Toolkit;
 public interface IConstants {
     int SCREEN_WIDTH = (int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
     int SCREEN_HEIGHT = (int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
-    int NUM_ROWS = 25;
-    int NUM_COLS = 40;
+    double ASPECT_RATIO = (double) SCREEN_WIDTH/SCREEN_HEIGHT;
+    int NUM_ROWS = 27;
+    int NUM_COLS = (int) (NUM_ROWS*ASPECT_RATIO);
     int TILE_SIZE = SCREEN_HEIGHT/TileGrid.NUM_ROWS;
-    int START_ROW = NUM_ROWS / 2;
-    int START_COL = NUM_COLS / 4;
-    int END_ROW = NUM_ROWS / 2;
-    int END_COL = (3 * NUM_COLS) / 4;
-    int MENU_X = SCREEN_WIDTH / 4;
+    int START_ROW = NUM_ROWS/2;
+    int START_COL = NUM_COLS/4;
+    int END_ROW = NUM_ROWS/2;
+    int END_COL = (3*NUM_COLS)/4;
+    int MENU_X = SCREEN_WIDTH/4;
     int MENU_Y = TILE_SIZE;
-    int MENU_WIDTH = SCREEN_WIDTH / 2;
-    int MENU_HEIGHT = (8 * SCREEN_HEIGHT) / 45;
-    int STROKE_WIDTH = (TILE_SIZE / 8);
+    int MENU_WIDTH = SCREEN_WIDTH/2;
+    int MENU_HEIGHT = (8*SCREEN_HEIGHT)/45;
+    int STROKE_WIDTH = (TILE_SIZE/8);
 
     // Menu Colors
     Color menuBackgroundColor = new Color(0, 0, 0, 0.35f);
