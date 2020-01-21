@@ -23,6 +23,9 @@ public interface IConstants {
     int MENU_HEIGHT = (8*SCREEN_HEIGHT)/45;
     int STROKE_WIDTH = (TILE_SIZE/8);
 
+    // Animation Constants
+    int BASE_DELAY = 4;
+
     // Menu Colors
     Color menuBackgroundColor = new Color(0, 0, 0, 0.35f);
     // Colors used to fill tiles on the grid.

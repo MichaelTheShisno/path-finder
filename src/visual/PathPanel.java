@@ -45,7 +45,7 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
         isAnimating = false;
         iterationIndex = 0;
         results = null;
-        timer = new Timer(1, this);
+        timer = new Timer(2, this);
     }
 
     /**
@@ -115,15 +115,25 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
         updateUI();
     }
 
+    /**
+     * Set timer delay based on progress in the animation.
+     * Start animation off fast then slow towards middle and then speed up towards the end.
+     */
     private void setTimerSpeed() {
         int delay;
         double percentDone = (double)(iterationIndex+1)/results.getOpenSetList().size();
-        if (percentDone < 0.2) {
-            delay = (int)(Math.pow(percentDone-0.2, 2) * 1000) + 1;
-        } else if (0.8 <= percentDone) {
-            delay = (int)(Math.pow(percentDone-0.8, 2) * 1000) + 1;
+        if (percentDone <= 0.2) {
+            delay = BASE_DELAY;
+        } else if (0.2 < percentDone && percentDone <= 0.4) {
+            delay = 2*BASE_DELAY;
+        } else if (0.4 < percentDone && percentDone <= 0.6) {
+            delay = 3*BASE_DELAY;
+        } else if (0.6 < percentDone && percentDone <= 0.8) {
+            delay = 2*BASE_DELAY;
+        } else if (0.8 < percentDone) {
+            delay = BASE_DELAY;
         } else {
-            delay = 1;
+            delay = BASE_DELAY;
         }
         timer.setDelay(delay);
     }
