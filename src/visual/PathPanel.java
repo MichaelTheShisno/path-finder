@@ -84,9 +84,6 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
         }
         // Reset open and closed nodes back to unblocked nodes.
         tileGrid.clearPath();
-        // Reset animation variables.
-        iterationIndex = 0;
-        results = null;
         // Reflect changes on grid UI.
         this.add(tileGrid);
         repaint();
@@ -104,9 +101,6 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
         }
         // Reset nodes back to normal.
         tileGrid.clearWalls();
-        // Reset animation variables.
-        iterationIndex = 0;
-        results = null;
         // Reflect changes on grid UI.
         this.add(tileGrid);
         repaint();
@@ -181,12 +175,25 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
                 lines = this.getLines(tileGrid.getTiles(results.getPath()));
                 drawPath(lines);
                 timer.stop();
+                // Reset animation variables.
+                iterationIndex = 0;
+                results = null;
             }
         } else {
-            System.out.println("No Path Exists");
-            timer.stop();
-            isRunning = false;
-            failPath();
+            if (iterationIndex < (FAIL_BLINKS * 2)) {
+                if (iterationIndex % 2 == 0) {
+                    failPath();
+                } else {
+                    clearPath();
+                }
+                iterationIndex++;
+            } else {
+                isRunning = false;
+                timer.stop();
+                // Reset animation variables.
+                iterationIndex = 0;
+                results = null;
+            }
         }
     }
 
@@ -210,11 +217,15 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
                 grid = new Grid(tileGrid);
                 AStarFinder aStar = new AStarFinder(grid);
                 results = aStar.findPath();
-                timer.start();
                 // If path found, animate the search.
                 if (results != null) {
                     System.out.println("Path Found");
+                    timer.setDelay(BASE_DELAY);
+                } else {
+                    System.out.println("No Path Exists");
+                    timer.setDelay(FAIL_DELAY);
                 }
+                timer.start();
             }
         } else if (pauseKeyPressed(e)) {
             // Pause and un-pause animation.

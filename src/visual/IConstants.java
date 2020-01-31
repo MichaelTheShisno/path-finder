@@ -25,6 +25,8 @@ public interface IConstants {
 
     // Animation Constants
     int BASE_DELAY = 4;
+    int FAIL_BLINKS = 3;
+    int FAIL_DELAY = 250;
 
     // Menu Colors
     Color menuBackgroundColor = new Color(0, 0, 0, 0.35f);
