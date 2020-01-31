@@ -45,11 +45,11 @@ public class TileGrid extends JPanel implements IConstants, MouseListener, Mouse
      * Clear walls and previous run's results.
      */
     public void clearWalls() {
-        for (int row = 0; row < NUM_ROWS; row++) {
-            for (int col = 0; col < NUM_COLS; col++) {
-                Tile.Status status = tileMatrix[row][col].getStatus();
+        for (Tile[] tileRow : tileMatrix) {
+            for (Tile tile : tileRow) {
+                Tile.Status status = tile.getStatus();
                 if (status != Tile.Status.START && status != Tile.Status.END) {
-                    tileMatrix[row][col].setStatus(Tile.Status.NORMAL);
+                    tile.setStatus(Tile.Status.NORMAL);
                 }
             }
         }
@@ -61,8 +61,22 @@ public class TileGrid extends JPanel implements IConstants, MouseListener, Mouse
     public void clearPath() {
         for (Tile[] tileRow : tileMatrix) {
             for (Tile tile : tileRow) {
-                if (tile.getStatus() == Tile.Status.OPEN || tile.getStatus() == Tile.Status.CLOSED) {
+                Tile.Status status = tile.getStatus();
+                if (status != Tile.Status.START && status != Tile.Status.END && status != Tile.Status.BLOCKED) {
                     tile.setStatus(Tile.Status.NORMAL);
+                }
+            }
+        }
+    }
+
+    /**
+     * Indicate failed path search by setting tiles to failed color.
+     */
+    public void failPath() {
+        for (Tile[] tileRow : tileMatrix) {
+            for (Tile tile : tileRow) {
+                if (tile.getStatus() == Tile.Status.NORMAL) {
+                    tile.setStatus(Tile.Status.FAILED);
                 }
             }
         }

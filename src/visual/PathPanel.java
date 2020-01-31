@@ -23,7 +23,6 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
     private ControllerMenu menu;
     private List<Line> lines;
     private boolean isRunning;
-    private boolean isAnimating;
     private SearchData results;
     private int iterationIndex;
     private Timer timer;
@@ -42,7 +41,6 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
         this.addKeyListener(this);
 
         isRunning = false;
-        isAnimating = false;
         iterationIndex = 0;
         results = null;
         timer = new Timer(2, this);
@@ -116,6 +114,19 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
     }
 
     /**
+     * Indicate failed path search by setting tiles to failed color.
+     */
+    private void failPath() {
+        this.removeAll();
+        // Reset open and closed nodes back to unblocked nodes.
+        tileGrid.failPath();
+        // Reflect changes on grid UI.
+        this.add(tileGrid);
+        repaint();
+        updateUI();
+    }
+
+    /**
      * Set timer delay based on progress in the animation.
      * Start animation off fast then slow towards middle and then speed up towards the end.
      */
@@ -146,7 +157,7 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         // If path finder is done and has results.
-        if (!isRunning && results != null) {
+        if (results != null) {
             // If there are "frames" to animate.
             if (iterationIndex < results.getOpenSetList().size()) {
                 // Paint the current iteration of open neighbor nodes.
@@ -166,14 +177,16 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
                 iterationIndex++;
             } else {
                 // Done animating, draw the lines that show the resulting path.
-                isAnimating = false;
+                isRunning = false;
                 lines = this.getLines(tileGrid.getTiles(results.getPath()));
                 drawPath(lines);
                 timer.stop();
             }
         } else {
-            isAnimating = false;
+            System.out.println("No Path Exists");
             timer.stop();
+            isRunning = false;
+            failPath();
         }
     }
 
@@ -197,31 +210,26 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
                 grid = new Grid(tileGrid);
                 AStarFinder aStar = new AStarFinder(grid);
                 results = aStar.findPath();
-                isRunning = false;
+                timer.start();
                 // If path found, animate the search.
                 if (results != null) {
                     System.out.println("Path Found");
-                    timer.start();
-                    isAnimating = true;
-                } else {
-                    System.out.println("No Path Exists");
                 }
             }
         } else if (pauseKeyPressed(e)) {
             // Pause and un-pause animation.
             System.out.println("Toggle Pause");
-            if (isAnimating) {
-                isAnimating = false;
+            if (isRunning) {
+                isRunning = false;
                 timer.stop();
             } else {
-                isAnimating = true;
+                isRunning = true;
                 timer.start();
             }
         } else if (cancelKeyPressed(e)) {
             // Stop current run and reset the grid.
             System.out.println("Cancel");
             isRunning = false;
-            isAnimating = false;
             timer.stop();
             clearWalls();
         }
@@ -252,7 +260,7 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
      * @return Returns if any of the reset keys are hit.
      */
     private boolean resetKeysPressed(KeyEvent e) {
-        return !(isRunning || isAnimating) && (e.getKeyChar() == KeyEvent.VK_R);
+        return !isRunning && (e.getKeyChar() == KeyEvent.VK_R);
     }
 
     /**
@@ -261,7 +269,7 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
      * @return Returns if any of the clear keys are hit.
      */
     private boolean clearKeysPressed(KeyEvent e) {
-        return !(isRunning || isAnimating) && (e.getKeyChar() == KeyEvent.VK_C);
+        return !isRunning && (e.getKeyChar() == KeyEvent.VK_C);
     }
 
     /**
@@ -270,7 +278,7 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
      * @return Returns if a start key is hit.
      */
     private boolean startKeyPressed(KeyEvent e) {
-        return !(isRunning || isAnimating) && (e.getKeyChar() == KeyEvent.VK_S);
+        return !isRunning && (e.getKeyChar() == KeyEvent.VK_S);
     }
 
     /**
@@ -288,6 +296,6 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
      * @return Returns if a cancel key is hit.
      */
     private boolean cancelKeyPressed(KeyEvent e) {
-        return (isRunning || isAnimating) && (e.getKeyChar() == KeyEvent.VK_C);
+        return isRunning && (e.getKeyChar() == KeyEvent.VK_C);
     }
 }
