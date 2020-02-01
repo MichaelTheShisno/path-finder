@@ -93,8 +93,8 @@ public class TileGrid extends JPanel implements IConstants, MouseListener, Mouse
     /**
      * Used for painting a specific tile a custom non-enumerated color.
      */
-    public void paintTile(int row, int col, Color color) {
-        tileMatrix[row][col].setColor(color);
+    public void rainbow(int row, int col) {
+        tileMatrix[row][col].rainbow();
     }
 
     /**

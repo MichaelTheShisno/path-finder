@@ -1,12 +1,15 @@
 package visual;
 
-import javax.swing.JComponent;
+import javax.swing.*;
+
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Class that provides an abstraction of the tiles which are laid out on the grid.
  */
-public class Tile extends JComponent implements IConstants {
+public class Tile extends JComponent implements IConstants, ActionListener {
     public enum Status {
         NORMAL, BLOCKED, START, END, OPEN, CLOSED, FAILED, TESTED
     }
@@ -14,6 +17,8 @@ public class Tile extends JComponent implements IConstants {
     private final int size;
     private Status status, prevStatus;
     private Color color;
+    private Timer timer;
+    private int angle;
 
     public Tile(int size) {
         super();
@@ -21,6 +26,8 @@ public class Tile extends JComponent implements IConstants {
         this.status = Status.NORMAL;
         this.prevStatus = Status.NORMAL;
         this.color = getTileColor(this.status);
+        this.timer = new Timer(8, this);
+        this.angle = 0;
     }
 
     public Status getStatus() {
@@ -28,6 +35,8 @@ public class Tile extends JComponent implements IConstants {
     }
 
     public void setStatus(Status newStatus) {
+        timer.stop();
+        angle = 0;
         this.prevStatus = this.status;
         this.status = newStatus;
         this.color = getTileColor(this.status);
@@ -35,16 +44,21 @@ public class Tile extends JComponent implements IConstants {
     }
 
     public void revertStatus() {
+        timer.stop();
+        angle = 0;
         this.status = this.prevStatus;
         this.prevStatus = Status.NORMAL;
         this.color = getTileColor(this.status);
         this.repaint();
     }
 
-    public void setColor(Color color) {
+    /**
+     * Invokes the timer used to create a rainbow effect
+     * on this tile.
+     */
+    public void rainbow() {
         if (this.status == Status.NORMAL) {
-            this.color = color;
-            this.repaint();
+            timer.start();
         }
     }
 
@@ -59,6 +73,32 @@ public class Tile extends JComponent implements IConstants {
         g2.draw(tile);
     }
 
+    /**
+     * Animates a sine-based rgb rainbow effect.
+     * From red->purple.
+     * @param e timer event
+     */
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (angle < 330) {
+            int red   = lights[(angle+120)%360];
+            int green = lights[angle];
+            int blue  = lights[(angle+240)%360];
+            color = new Color(red, green, blue);
+            angle+=3;
+            this.repaint();
+        } else {
+            timer.stop();
+            angle = 0;
+            this.setStatus(Status.NORMAL);
+        }
+    }
+
+    /**
+     * Return the respective color for a tile's status.
+     * @param status Tile.Status enum
+     * @return Color corresponding to the given status.
+     */
     private static Color getTileColor(Status status) {
         switch (status) {
             case START:
