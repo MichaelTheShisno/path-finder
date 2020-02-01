@@ -19,6 +19,7 @@ public class Tile extends JComponent implements IConstants, ActionListener {
     private Color color;
     private Timer timer;
     private int angle;
+    private int delay;
 
     public Tile(int size) {
         super();
@@ -28,6 +29,7 @@ public class Tile extends JComponent implements IConstants, ActionListener {
         this.color = getTileColor(this.status);
         this.timer = new Timer(1, this);
         this.angle = 0;
+        this.delay = 0;
         this.setOpaque(true);
     }
 
@@ -61,6 +63,14 @@ public class Tile extends JComponent implements IConstants, ActionListener {
         if (this.status == Status.NORMAL) {
             timer.start();
         }
+    }
+
+    /**
+     * Used to animate a ripple effect on the board
+     * @param initDelay Timer's initial delay
+     */
+    public void setInitialDelay(int initDelay) {
+        timer.setInitialDelay(initDelay);
     }
 
     @Override

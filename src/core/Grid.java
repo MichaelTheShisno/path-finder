@@ -16,9 +16,10 @@ public class Grid {
     private final static int INFINITY = Integer.MAX_VALUE;
     private final static int[][] orthogonal = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
     private final static int[][] diagonal = {{-1, -1}, {-1, 1}, {1, 1}, {1, -1}};
+    private Tile[][] tiles;
 
     public Grid(TileGrid tileGrid) {
-        Tile[][] tiles = tileGrid.getTileMatrix();
+        this.tiles = tileGrid.getTileMatrix();
         int NUM_ROWS = tiles.length;
         int NUM_COLS = tiles[0].length;
         this.grid = new Node[NUM_ROWS][NUM_COLS];
@@ -70,6 +71,8 @@ public class Grid {
                 node.setG(0.5*INFINITY);
                 node.setH(Heuristic.getHeuristic(hType, dx, dy));
                 node.setParent(null);
+                int initDelay = 10*(int)Heuristic.getHeuristic(Heuristic.Type.Euclidean, dx, dy);
+                tiles[node.getRow()][node.getCol()].setInitialDelay(initDelay);
             }
         }
         startNode.setG(0);
