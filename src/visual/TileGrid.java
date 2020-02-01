@@ -82,19 +82,22 @@ public class TileGrid extends JPanel implements IConstants, MouseListener, Mouse
         }
     }
 
+    public void rainbowBoard() {
+        for (Tile[] tileRow : tileMatrix) {
+            for (Tile tile : tileRow) {
+                if (tile.getStatus() == Tile.Status.NORMAL) {
+                    tile.rainbow();
+                }
+            }
+        }
+    }
+
     /**
      * Get the 2d matrix of tiles.
      * @return tileMatrix
      */
     public Tile[][] getTileMatrix() {
         return tileMatrix;
-    }
-
-    /**
-     * Used for painting a specific tile a custom non-enumerated color.
-     */
-    public void rainbow(int row, int col) {
-        tileMatrix[row][col].rainbow();
     }
 
     /**

@@ -174,6 +174,13 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
     }
 
     /**
+     * Performs a rainbow effect on tiles that are normal.
+     */
+    private void rainbow() {
+        tileGrid.rainbowBoard();
+    }
+
+    /**
      * Set timer delay based on progress in the animation.
      * Start animation off fast then slow towards middle and then speed up towards the end.
      */
@@ -230,8 +237,8 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
                     linesDrawn = true;
                 } else {
                     isRunning = false;
-//                    tileGrid.paintTile(0, 0, new Color(43, 136, 255));
                     timer.stop();
+                    rainbow();
                     // Reset animation variables.
                     iterationIndex = 0;
                     results = null;

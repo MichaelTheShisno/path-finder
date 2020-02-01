@@ -26,8 +26,9 @@ public class Tile extends JComponent implements IConstants, ActionListener {
         this.status = Status.NORMAL;
         this.prevStatus = Status.NORMAL;
         this.color = getTileColor(this.status);
-        this.timer = new Timer(8, this);
+        this.timer = new Timer(1, this);
         this.angle = 0;
+        this.setOpaque(true);
     }
 
     public Status getStatus() {
@@ -81,12 +82,25 @@ public class Tile extends JComponent implements IConstants, ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (angle < 330) {
+            // Calculate rgb values
             int red   = lights[(angle+120)%360];
             int green = lights[angle];
             int blue  = lights[(angle+240)%360];
             color = new Color(red, green, blue);
             angle+=3;
-            this.repaint();
+            // Fill in colors
+            Graphics2D g = (Graphics2D)this.getGraphics();
+            g.setColor(color);
+            RepaintManager rm = RepaintManager.currentManager(this);
+            boolean b = rm.isDoubleBufferingEnabled();
+            rm.setDoubleBufferingEnabled(false);
+            Rectangle tile = new Rectangle(size, size);
+            g.fill(tile);
+            g.setColor(Color.BLACK);
+            g.draw(tile);
+            paintImmediately(this.getX(), this.getY(), size, size);
+            g.dispose();
+            rm.setDoubleBufferingEnabled(b);
         } else {
             timer.stop();
             angle = 0;
