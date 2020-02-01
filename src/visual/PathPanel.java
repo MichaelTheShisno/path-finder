@@ -23,6 +23,8 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
     private ControllerMenu menu;
     private List<Line> lines;
     private boolean isRunning;
+    private boolean isPaused;
+    private boolean linesDrawn;
     private SearchData results;
     private int iterationIndex;
     private Timer timer;
@@ -41,9 +43,60 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
         this.addKeyListener(this);
 
         isRunning = false;
+        isPaused = false;
+        linesDrawn = false;
         iterationIndex = 0;
         results = null;
         timer = new Timer(2, this);
+    }
+
+    public void startSearch() {
+        clearPath();
+        isRunning = true;
+        isPaused = false;
+        linesDrawn = false;
+        // Reset animation variables.
+        iterationIndex = 0;
+        results = null;
+        // Perform path finding.
+        grid = new Grid(tileGrid);
+        AStarFinder aStar = new AStarFinder(grid);
+        results = aStar.findPath();
+        // Set timer speed based on whether a path is found.
+        if (results != null) {
+            System.out.println("Path Found");
+            timer.setDelay(BASE_DELAY);
+        } else {
+            System.out.println("No Path Exists");
+            timer.setDelay(FAIL_DELAY);
+        }
+        // Animate search.
+        timer.start();
+    }
+
+    /**
+     * Toggle pause during animation of search.
+     */
+    public void pauseSearch() {
+        if (isPaused) {
+            timer.start();
+        } else {
+            timer.stop();
+        }
+        isPaused = !isPaused;
+    }
+
+    /**
+     * Stop current run and reset grid to initial state.
+     */
+    public void cancelSearch() {
+        isRunning = false;
+        isPaused = false;
+        linesDrawn = false;
+        iterationIndex = 0;
+        results = null;
+        timer.stop();
+        clearPath();
     }
 
     /**
@@ -171,13 +224,18 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
                 iterationIndex++;
             } else {
                 // Done animating, draw the lines that show the resulting path.
-                isRunning = false;
-                lines = this.getLines(tileGrid.getTiles(results.getPath()));
-                drawPath(lines);
-                timer.stop();
-                // Reset animation variables.
-                iterationIndex = 0;
-                results = null;
+                if (!linesDrawn) {
+                    lines = this.getLines(tileGrid.getTiles(results.getPath()));
+                    drawPath(lines);
+                    linesDrawn = true;
+                } else {
+                    isRunning = false;
+//                    tileGrid.paintTile(0, 0, new Color(43, 136, 255));
+                    timer.stop();
+                    // Reset animation variables.
+                    iterationIndex = 0;
+                    results = null;
+                }
             }
         } else {
             if (iterationIndex < (FAIL_BLINKS * 2)) {
@@ -209,40 +267,14 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
             System.out.println("Clear Path");
             clearPath();
         } else if (startKeyPressed(e)) {
-            if (!isRunning) {
-                clearPath();
-                System.out.println("Run");
-                isRunning = true;
-                // Perform path finding.
-                grid = new Grid(tileGrid);
-                AStarFinder aStar = new AStarFinder(grid);
-                results = aStar.findPath();
-                // If path found, animate the search.
-                if (results != null) {
-                    System.out.println("Path Found");
-                    timer.setDelay(BASE_DELAY);
-                } else {
-                    System.out.println("No Path Exists");
-                    timer.setDelay(FAIL_DELAY);
-                }
-                timer.start();
-            }
+            System.out.println("Run");
+            startSearch();
         } else if (pauseKeyPressed(e)) {
-            // Pause and un-pause animation.
             System.out.println("Toggle Pause");
-            if (isRunning) {
-                isRunning = false;
-                timer.stop();
-            } else {
-                isRunning = true;
-                timer.start();
-            }
+            pauseSearch();
         } else if (cancelKeyPressed(e)) {
-            // Stop current run and reset the grid.
             System.out.println("Cancel");
-            isRunning = false;
-            timer.stop();
-            clearWalls();
+            cancelSearch();
         }
     }
 
@@ -298,7 +330,7 @@ public class PathPanel extends JPanel implements IConstants, KeyListener, Action
      * @return Returns if a pause key is hit.
      */
     private boolean pauseKeyPressed(KeyEvent e) {
-        return e.getKeyChar() == KeyEvent.VK_P;
+        return (isRunning || isPaused) && e.getKeyChar() == KeyEvent.VK_P;
     }
 
     /**
