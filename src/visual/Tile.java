@@ -13,12 +13,50 @@ public class Tile extends JComponent implements IConstants {
 
     private final int size;
     private Status status, prevStatus;
+    private Color color;
 
     public Tile(int size) {
         super();
         this.size = size;
         this.status = Status.NORMAL;
         this.prevStatus = Status.NORMAL;
+        this.color = getTileColor(this.status);
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status newStatus) {
+        this.prevStatus = this.status;
+        this.status = newStatus;
+        this.color = getTileColor(this.status);
+        this.repaint();
+    }
+
+    public void revertStatus() {
+        this.status = this.prevStatus;
+        this.prevStatus = Status.NORMAL;
+        this.color = getTileColor(this.status);
+        this.repaint();
+    }
+
+    public void setColor(Color color) {
+        if (this.status == Status.NORMAL) {
+            this.color = color;
+            this.repaint();
+        }
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        Graphics2D g2 = (Graphics2D)g;
+        g2.setColor(color);
+        Rectangle tile = new Rectangle(size, size);
+        g2.fill(tile);
+        g2.setColor(Color.BLACK);
+        g2.draw(tile);
     }
 
     private static Color getTileColor(Status status) {
@@ -40,32 +78,5 @@ public class Tile extends JComponent implements IConstants {
             default:
                 return testedColor;
         }
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status newStatus) {
-        this.prevStatus = this.status;
-        this.status = newStatus;
-        this.repaint();
-    }
-
-    public void revertStatus() {
-        this.status = this.prevStatus;
-        this.prevStatus = Status.NORMAL;
-        this.repaint();
-    }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        Graphics2D g2 = (Graphics2D)g;
-        g2.setColor(getTileColor(this.status));
-        Rectangle tile = new Rectangle(size, size);
-        g2.fill(tile);
-        g2.setColor(Color.BLACK);
-        g2.draw(tile);
     }
 }
