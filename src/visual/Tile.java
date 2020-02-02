@@ -74,14 +74,16 @@ public class Tile extends JComponent implements IConstants, ActionListener {
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+    public void paint(Graphics g) {
+        RepaintManager rm = RepaintManager.currentManager(this);
+        boolean b = rm.isDoubleBufferingEnabled();
         Graphics2D g2 = (Graphics2D)g;
+        Rectangle r = g2.getClipBounds();
         g2.setColor(color);
-        Rectangle tile = new Rectangle(size, size);
-        g2.fill(tile);
+        g2.fill(r);
         g2.setColor(Color.BLACK);
-        g2.draw(tile);
+        g2.draw(r);
+        rm.setDoubleBufferingEnabled(b);
     }
 
     /**
