@@ -71,7 +71,7 @@ public class Grid {
                 node.setG(0.5*INFINITY);
                 node.setH(Heuristic.getHeuristic(hType, dx, dy));
                 node.setParent(null);
-                int initDelay = 10*(int)Heuristic.getHeuristic(Heuristic.Type.Euclidean, dx, dy);
+                int initDelay = 20*(int)Heuristic.getHeuristic(Heuristic.Type.Euclidean, dx, dy);
                 tiles[node.getRow()][node.getCol()].setInitialDelay(initDelay);
             }
         }

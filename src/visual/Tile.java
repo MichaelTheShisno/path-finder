@@ -27,7 +27,7 @@ public class Tile extends JComponent implements IConstants, ActionListener {
         this.status = Status.NORMAL;
         this.prevStatus = Status.NORMAL;
         this.color = getTileColor(this.status);
-        this.timer = new Timer(1, this);
+        this.timer = new Timer(9, this);
         this.angle = 0;
         this.delay = 0;
         this.setOpaque(true);
@@ -97,7 +97,7 @@ public class Tile extends JComponent implements IConstants, ActionListener {
             int green = lights[angle];
             int blue  = lights[(angle+240)%360];
             color = new Color(red, green, blue);
-            angle+=3;
+            angle+=9;
             // Fill in colors
             Graphics2D g = (Graphics2D)this.getGraphics();
             g.setColor(color);
