@@ -1,5 +1,6 @@
 package core;
 
+import visual.IConstants;
 import visual.Tile;
 import visual.TileGrid;
 
@@ -9,7 +10,7 @@ import java.util.HashSet;
 /**
  * Abstraction layer of the grid of nodes.
  */
-public class Grid {
+public class Grid implements IConstants {
     private Node[][] grid;
     private Node startNode;
     private Node endNode;
@@ -62,6 +63,7 @@ public class Grid {
      * @param hType Type of heuristic to be used for calculating hScores for each node.
      */
     public void init(Heuristic.Type hType) {
+        double maxDistanceFromEnd = maxDistance();
         int endRow = endNode.getRow(), endCol = endNode.getCol();
         int dx, dy;
         for (Node[] row : grid) {
@@ -71,11 +73,21 @@ public class Grid {
                 node.setG(0.5*INFINITY);
                 node.setH(Heuristic.getHeuristic(hType, dx, dy));
                 node.setParent(null);
-                int initDelay = 20*(int)Heuristic.getHeuristic(Heuristic.Type.Euclidean, dx, dy);
-                tiles[node.getRow()][node.getCol()].setInitialDelay(initDelay);
+                double distanceFromEnd = getDistanceBetween(node, endNode, 1);
+                tiles[node.getRow()][node.getCol()].setColorOffset(distanceFromEnd/maxDistanceFromEnd);
+                tiles[node.getRow()][node.getCol()].setInitialDelay((int)(200*distanceFromEnd));
             }
         }
         startNode.setG(0);
+    }
+
+    private double maxDistance() {
+        double maxDistance = -1;
+        int[][] corners = new int[][] {{0, 0}, {0, NUM_COLS-1}, {NUM_ROWS-1, 0}, {NUM_ROWS-1, NUM_COLS-1}};
+        for (int[] pair : corners) {
+            maxDistance = Math.max(maxDistance, getDistanceBetween(getNodeAt(pair[0], pair[1]), endNode, 1));
+        }
+        return maxDistance;
     }
 
     public Node getNodeAt(int row, int col) {
