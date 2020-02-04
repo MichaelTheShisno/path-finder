@@ -19,7 +19,6 @@ public class Tile extends JComponent implements IConstants, ActionListener {
     private Color color;
     private Timer timer;
     private int angle;
-    private int delay;
 
     public Tile(int size) {
         super();
@@ -29,7 +28,6 @@ public class Tile extends JComponent implements IConstants, ActionListener {
         this.color = getTileColor(this.status);
         this.timer = new Timer(9, this);
         this.angle = 0;
-        this.delay = 0;
         this.setOpaque(true);
     }
 
@@ -74,25 +72,20 @@ public class Tile extends JComponent implements IConstants, ActionListener {
     }
 
     @Override
-    public void paint(Graphics g) {
+    protected void paintComponent(Graphics g) {
         RepaintManager rm = RepaintManager.currentManager(this);
         boolean b = rm.isDoubleBufferingEnabled();
+        super.paintComponent(g);
         Graphics2D g2 = (Graphics2D)g;
-        Rectangle r = g2.getClipBounds();
         g2.setColor(color);
-        g2.fill(r);
+        Rectangle tile = new Rectangle(size, size);
+        g2.fill(tile);
         g2.setColor(Color.BLACK);
-        g2.draw(r);
+        g2.draw(tile);
         rm.setDoubleBufferingEnabled(b);
     }
 
-    /**
-     * Animates a sine-based rgb rainbow effect.
-     * From red->purple.
-     * @param e timer event
-     */
-    @Override
-    public void actionPerformed(ActionEvent e) {
+    private void fullRainbow() {
         if (angle < 330) {
             // Calculate rgb values
             int red   = lights[(angle+120)%360];
@@ -118,6 +111,17 @@ public class Tile extends JComponent implements IConstants, ActionListener {
             angle = 0;
             this.setStatus(Status.NORMAL);
         }
+    }
+
+
+    /**
+     * Animates a sine-based rgb rainbow effect.
+     * From red->purple.
+     * @param e timer event
+     */
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        fullRainbow();
     }
 
     /**
